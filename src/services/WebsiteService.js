@@ -6,16 +6,16 @@ class WebsiteService {
         this.service = service
     }
 
-    getWebsites(){
+    getWebsites() {
         return new Promise((resolve, reject) => {
             this.service.get('/websites').then(
-                response => {resolve(response.data)}
+                response => { resolve(response.data) }
             )
-            .catch(err => {reject(err)})
+                .catch(err => { reject(err) })
         });
     }
-    
-    getWebsite(id){
+
+    getWebsite(id) {
         return new Promise((resolve, reject) => {
             this.service.get(`/websites/${id}`)
                 .then(response => resolve(response.data))
@@ -23,7 +23,7 @@ class WebsiteService {
         });
     }
 
-    createWebsite(website){
+    createWebsite(website) {
         return new Promise((resolve, reject) => {
             this.service.post('/websites', website)
                 .then(response => resolve(response.data))
@@ -31,7 +31,7 @@ class WebsiteService {
         });
     }
 
-    updateWebsite(website){
+    updateWebsite(website) {
         return new Promise((resolve, reject) => {
             this.service.put(`/websites/${website.id}`, website)
                 .then(response => resolve(response.data))
@@ -39,13 +39,22 @@ class WebsiteService {
         });
     }
 
-    deleteWebsite(id){
+    deleteWebsite(id) {
         return new Promise((resolve, reject) => {
             this.service.delete(`/websites/${id}`)
                 .then(response => resolve(response.data))
                 .catch(err => reject(err));
         });
     }
+
+    getFrequency(websiteId) {
+        return new Promise((resolve, reject) => {
+            this.service.get(`/websites/${websiteId}/frequency`)
+                .then(response => resolve(response.data))
+                .catch(err => reject(err));
+        });
+    }
+
 }
 
 export { WebsiteService }

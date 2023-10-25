@@ -11,12 +11,12 @@ const router = createRouter({
     {
       path : '/website/new',
       name: 'website-new',
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/CreateWebsiteView.vue')
     },
     {
       path: '/website/:id/edit',
       name: 'website-edit',
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/EditWebsiteView.vue')
     },
     {
       path: '/about',

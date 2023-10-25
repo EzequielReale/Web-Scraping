@@ -6,9 +6,10 @@ const toggleDrawer = ref(false);
 </script>
 
 <template>
-  <v-app>
+  <v-app id="app">
+
     <v-app-bar app :color="'primary'">
-      <v-toolbar-title>Web Scraping App</v-toolbar-title>
+      <v-toolbar-title class="white--text">Web Scraping App</v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="text-center">
         <v-btn to="/" class="white--text">Página principal</v-btn>
@@ -24,3 +25,13 @@ const toggleDrawer = ref(false);
     </v-main>
   </v-app>
 </template>
+
+<style>
+#app {
+  background: #ffffff; /* Cambia el color de fondo */
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+/* Agrega estilos personalizados aquí */
+</style>
+
