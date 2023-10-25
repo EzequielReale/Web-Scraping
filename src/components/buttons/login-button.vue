@@ -6,7 +6,7 @@ const { loginWithRedirect } = useAuth0();
 const handleLogin = () => {
     loginWithRedirect({
         appState: {
-            target: "/",
+            target: "/websites",
         },
     });
 };

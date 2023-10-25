@@ -52,7 +52,7 @@ export default {
             // Llama al servicio para actualizar el sitio web
             WebsiteService.updateWebsite(updatedWebsite)
                 .then(() => {
-                    this.$router.push('/');
+                    this.$router.push('/websites');
                 })
                 .catch((error) => {
                     console.error('Error:', error);
@@ -64,7 +64,7 @@ export default {
 
 
 <template>
-    <v-container fluid class="align-center justify-center" style="width: 100vh;">
+    <v-container fluid class="align-center justify-center" style="width: 80vh;">
         <h1 class="display-2 mb-4">Editar Sitio Web</h1>
         <v-form @submit.prevent="editWebsite">
             <v-text-field v-model="website.name" label="Nombre" required></v-text-field>

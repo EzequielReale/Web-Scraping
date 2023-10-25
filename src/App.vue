@@ -18,12 +18,14 @@ const toggleDrawer = ref(false);
       <v-toolbar-title class="white--text">Web Scraping App</v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="text-center">
-        
-        
+
         <v-btn to="/" class="white--text">Página principal</v-btn>
-        <v-btn to="/website/new" class="white--text">Agregar sitio</v-btn>
+        <template v-if="isAuthenticated">
+          <v-btn to="/websites" class="white--text">Sitios web</v-btn>
+          <v-btn to="/website/new" class="white--text">Agregar sitio</v-btn>
+        </template>
         <v-btn to="/about" class="white--text">Acerca de</v-btn>
-        
+
         <template v-if="!isAuthenticated">
           <LoginButton />
         </template>
@@ -45,7 +47,7 @@ const toggleDrawer = ref(false);
 <style>
 #app {
   background: #ffffff;
-  height: 100vh;
+  height: display-200vh;
 }
 </style>
 
