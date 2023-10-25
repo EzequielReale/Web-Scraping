@@ -11,10 +11,9 @@ const toggleDrawer = ref(false);
       <v-toolbar-title>Web Scraping App</v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="text-center">
-        <v-btn to="/" class="white--text">Home</v-btn>
-        <v-btn to="/website/new" class="white--text">Nuevo sitio</v-btn>
-        <v-btn to="/website/:id" class="white--text">Show</v-btn>
-        <v-btn to="/website/:id/edit" class="white--text">Edit</v-btn>
+        <v-btn to="/" class="white--text">Página principal</v-btn>
+        <v-btn to="/website/new" class="white--text">Agregar sitio</v-btn>
+        <v-btn to="/about" class="white--text">Acerca de</v-btn>
       </div>
     </v-app-bar>
 
