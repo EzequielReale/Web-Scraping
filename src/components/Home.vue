@@ -87,8 +87,3 @@ function deleteWebsite(id) {
   /* Color de fuente personalizado */
 }
 </style>
-  
-  
-  
-  
-
