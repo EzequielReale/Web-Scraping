@@ -22,7 +22,7 @@ onBeforeMount(() => {
 });
 
 function getSubtitle(website) {
-  return `${website.url} | ${WebsiteService.getFrequency(website.id)}`
+  return `${website.url} | Actualización: ${website.frequencyId} | Niveles de página: ${website.pageLevels}`
 }
 
 function editWebsite(website) {
@@ -43,7 +43,7 @@ function deleteWebsite(id) {
 <template>
   <v-container fluid class="align-center justify-center" style="width: 40vh;">
     <h1 class="display-2 mb-4">Tus Sitios Web</h1>
-    <v-sheet width="mx-auto" class="mx-auto">
+    <v-sheet width="570" class="mx-auto">
       <v-list>
         <v-list-item-group v-if="websites.length > 0">
           <v-list-item v-for="website in websites" :key="website.id" class="website-list-item">
@@ -52,7 +52,7 @@ function deleteWebsite(id) {
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title class="headline font-weight-bold">{{ website.name }}</v-list-item-title>
-              <v-list-item-subtitle class="caption">{{ website.url }}</v-list-item-subtitle>
+              <v-list-item-subtitle class="caption">{{ getSubtitle(website) }}</v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-action>
               <v-btn class="mr-2" @click="editWebsite(website)" color="primary">

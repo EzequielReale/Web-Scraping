@@ -8,7 +8,7 @@ export default {
         name: '',
         url: '',
         pageLevels: 0,
-        frequency: null,
+        frequencyId: null,
         snippet: '',
       },
       frequencies: ['Diario', 'Semanal', 'Mensual'],
@@ -17,7 +17,7 @@ export default {
   methods: {
     addWebsite() {
       // Validación de campos
-      if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || !this.website.frequency || !this.website.snippet) {
+      if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || !this.website.frequencyId || !this.website.snippet) {
         return alert('Debe llenar todos los campos');
       }
 
@@ -26,7 +26,7 @@ export default {
         name: this.website.name,
         url: this.website.url,
         pageLevels: this.website.pageLevels,
-        //frequency: this.website.frequency,
+        frequencyId: this.website.frequencyId,
         snippet: this.website.snippet,
       };
 
@@ -52,7 +52,7 @@ export default {
       <v-text-field v-model="website.url" label="URL" required></v-text-field>
       <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99"
         type="number"></v-text-field>
-      <v-select v-model="website.frequency" :items="frequencies" label="Frecuencia" required></v-select>
+      <v-select v-model="website.frequencyId" :items="frequencies" label="Frecuencia" required></v-select>
       <v-text-field v-model="website.snippet" label="Snippet" required></v-text-field>
       <v-btn type="submit" color="primary">Agregar</v-btn>
     </v-form>
