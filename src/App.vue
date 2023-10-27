@@ -5,26 +5,11 @@ import { RouterLink, RouterView } from 'vue-router';
 import LoginButton from "@/components/buttons/login-button.vue";
 import LogoutButton from "@/components/buttons/logout-button.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
-import { useAuthStore } from '@/stores/userAuthStore.js';
-import { onMounted } from 'vue';
+
+import { Suspense } from 'vue';
+import UserAuth from './components/UserAuth.vue';
 
 const { isAuthenticated } = useAuth0();
-const { user } = useAuth0();
-const { getAccessTokenSilently } = useAuth0();
-const authStore = useAuthStore()
-
-async function setAuthStore() {
-  if (isAuthenticated) {
-    const token = await getAccessTokenSilently();
-    authStore.login(token, user.value)
-  } else {
-    authStore.logout()
-  }
-}
-
-onMounted (() => {
-  setAuthStore()
-})
 
 const toggleDrawer = ref(false);
 </script>
@@ -56,6 +41,9 @@ const toggleDrawer = ref(false);
 
     <v-main>
       <v-container fluid>
+        <Suspense>
+          <UserAuth />
+        </Suspense>
         <RouterView />
       </v-container>
     </v-main>
