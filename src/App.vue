@@ -16,6 +16,7 @@ const authStore = useAuthStore()
 async function setAuthStore() {
   if (isAuthenticated) {
     const token = await getAccessTokenSilently();
+    //client.default.headers['authorization'] = `Bearer ${token}`;
     authStore.login(token, user.value)
   } else {
     authStore.logout()
