@@ -7,18 +7,17 @@ export default {
       website: {
         name: '',
         url: '',
-        pageLevels: 0,
-        frequencyId: null,
+        pageLevels: 1,
+        frequency: 1,
         snippet: '(cheerio)=>{\nreturn {attr:cheerio("elem")}\n}',
       },
-      frequencies: ['Diario', 'Semanal', 'Mensual'],
     };
   },
   methods: {
     addWebsite() {
       // Validación de campos
-      if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || !this.website.frequencyId || !this.website.snippet) {
-        return alert('Debe llenar todos los campos');
+      if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || this.website.frequency < 1 || !this.website.snippet) {
+        return alert('Debe llenar correctamente todos los campos');
       }
 
       // Crea un objeto con los datos del sitio web
@@ -26,7 +25,7 @@ export default {
         name: this.website.name,
         url: this.website.url,
         pageLevels: this.website.pageLevels,
-        frequencyId: this.website.frequencyId,
+        frequency: this.website.frequency,
         snippet: this.website.snippet,
       };
 
@@ -50,9 +49,8 @@ export default {
     <v-form @submit.prevent="addWebsite">
       <v-text-field v-model="website.name" label="Nombre" required></v-text-field>
       <v-text-field v-model="website.url" label="URL" required></v-text-field>
-      <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99"
-        type="number"></v-text-field>
-      <v-select v-model="website.frequencyId" :items="frequencies" label="Frecuencia" required></v-select>
+      <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99" type="number"></v-text-field>
+      <v-text-field v-model.number="website.frequency" label="Frecuencia (segundos)" required min="1" type="number"></v-text-field>
       <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
       <v-btn type="submit" color="primary">Agregar</v-btn>
     </v-form>

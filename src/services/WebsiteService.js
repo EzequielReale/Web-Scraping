@@ -46,15 +46,6 @@ class WebsiteService {
                 .catch(err => reject(err));
         });
     }
-
-    getFrequency(websiteId) {
-        return new Promise((resolve, reject) => {
-            this.service.get(`/websites/${websiteId}/frequency`)
-                .then(response => resolve(response.data))
-                .catch(err => reject(err));
-        });
-    }
-
 }
 
 export { WebsiteService }

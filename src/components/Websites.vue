@@ -26,7 +26,7 @@ onBeforeMount(() => {
 });
 
 function getSubtitle(website) {
-  return `${website.url} | Actualización: ${website.frequencyId} | Niveles de página: ${website.pageLevels}`
+  return `${website.url} | Actualización: cada ${website.frequency} segundos | Niveles de página: ${website.pageLevels}`
 }
 
 function editWebsite(website) {

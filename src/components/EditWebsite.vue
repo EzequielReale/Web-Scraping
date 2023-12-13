@@ -8,10 +8,9 @@ export default {
                 name: '',
                 url: '',
                 pageLevels: 0,
-                frequencyId: null,
+                frequency: 0,
                 snippet: '',
             },
-            frequencies: ['Diario', 'Semanal', 'Mensual'],
         };
     },
     created() {
@@ -24,7 +23,7 @@ export default {
                     name: website.name,
                     url: website.url,
                     pageLevels: website.pageLevels,
-                    frequencyId: website.frequencyId,
+                    frequency: Number(website.frequency),
                     snippet: website.snippet,
                 };
             })
@@ -35,7 +34,7 @@ export default {
     methods: {
         editWebsite() {
             // Validación de campos
-            if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || !this.website.frequencyId || !this.website.snippet) {
+            if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || this.website.frequency < 1 || !this.website.snippet) {
                 return alert('Debe llenar todos los campos correctamente');
             }
 
@@ -45,7 +44,7 @@ export default {
                 name: this.website.name,
                 url: this.website.url,
                 pageLevels: this.website.pageLevels,
-                frequencyId: this.website.frequencyId,
+                frequency: this.website.frequency,
                 snippet: this.website.snippet,
             };
 
@@ -71,7 +70,8 @@ export default {
             <v-text-field v-model="website.url" label="URL" required></v-text-field>
             <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99"
                 type="number"></v-text-field>
-            <v-select v-model="website.frequencyId" :items="frequencies" label="Frecuencia" required></v-select>
+            <v-text-field v-model.number="website.frequency" label="Frecuencia (segundos)" required min="1"
+                type="number"></v-text-field>
             <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
             <v-btn type="submit" color="primary">Guardar Cambios</v-btn>
         </v-form>
