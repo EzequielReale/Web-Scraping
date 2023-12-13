@@ -10,6 +10,23 @@ import { Suspense } from 'vue';
 import UserAuth from './components/UserAuth.vue';
 
 const { isAuthenticated } = useAuth0();
+const { user } = useAuth0();
+const { getAccessTokenSilently } = useAuth0();
+const authStore = useAuthStore()
+
+async function setAuthStore() {
+  if (isAuthenticated) {
+    const token = await getAccessTokenSilently();
+    client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    authStore.login(token, user.value)
+  } else {
+    authStore.logout()
+  }
+}
+
+onMounted (() => {
+  setAuthStore()
+})
 
 const toggleDrawer = ref(false);
 </script>

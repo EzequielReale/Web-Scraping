@@ -9,7 +9,7 @@ export default {
         url: '',
         pageLevels: 0,
         frequencyId: null,
-        snippet: '',
+        snippet: '(cheerio)=>{\nreturn {attr:cheerio("elem")}\n}',
       },
       frequencies: ['Diario', 'Semanal', 'Mensual'],
     };
@@ -53,7 +53,7 @@ export default {
       <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99"
         type="number"></v-text-field>
       <v-select v-model="website.frequencyId" :items="frequencies" label="Frecuencia" required></v-select>
-      <v-text-field v-model="website.snippet" label="Snippet" required></v-text-field>
+      <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
       <v-btn type="submit" color="primary">Agregar</v-btn>
     </v-form>
   </v-container>

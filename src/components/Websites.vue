@@ -2,6 +2,7 @@
 import WebsiteService from "../services/WebsiteService";
 import { ref, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { client } from "../types/ClientAPI";
 
 const route = useRoute();
 const router = useRouter();
@@ -12,8 +13,11 @@ const success = ref(false)
 
 
 function setWebsites() {
-  WebsiteService.getWebsites().then(
-    result => websites.value = result
+  //WebsiteService.getWebsites().then(
+  //  result => websites.value = result
+  //)
+  client["WebsiteController.find"]().then(
+    result => websites.value = result.data
   )
 }
 
