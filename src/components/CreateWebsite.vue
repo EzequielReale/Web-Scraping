@@ -52,7 +52,8 @@ export default {
       <v-text-field v-model.number="website.pageLevels" label="Niveles de página (1-99)" required min="1" max="99" type="number"></v-text-field>
       <v-text-field v-model.number="website.frequency" label="Frecuencia (segundos)" required min="1" type="number"></v-text-field>
       <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
-      <v-btn type="submit" color="primary">Agregar</v-btn>
+      <v-btn class="mr-2" type="submit" color="primary">Agregar</v-btn>
+      <v-btn class="mr-2" @click="$router.push('/websites')" color="error">Cancelar</v-btn>
     </v-form>
   </v-container>
 </template>

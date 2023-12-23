@@ -42,6 +42,15 @@ function deleteWebsite(id) {
     () => error.value = true
   )
 }
+
+function seePages(website) {
+  router.push(`/website/${website.id}/pages`)
+}
+
+function seeErrors(website) {
+  router.push(`/website/${website.id}/errors`)
+}
+
 </script>
 
 <template>
@@ -60,10 +69,16 @@ function deleteWebsite(id) {
             </v-list-item-content>
             <v-list-item-action>
               <v-btn class="mr-2" @click="editWebsite(website)" color="primary">
-                Editar
+                Editar<v-icon>mdi-pencil</v-icon>
               </v-btn>
-              <v-btn @click="deleteWebsite(website.id)" color="error">
-                Eliminar
+              <v-btn class="mr-2" @click="deleteWebsite(website.id)" color="error">
+                Eliminar<v-icon>mdi-delete</v-icon>
+              </v-btn>
+              <v-btn class="mr-2" @click="seePages(website)" color="primary">
+                Resultados<v-icon>mdi-file-document-outline</v-icon>
+              </v-btn>
+              <v-btn class="mr-2" @click="seeErrors(website)" color="error">
+                Errores<v-icon>mdi-alert</v-icon>
               </v-btn>
             </v-list-item-action>
           </v-list-item>

@@ -9,128 +9,30 @@ import type {
 declare namespace Components {
     namespace Schemas {
         /**
-         * Frequency
-         */
-        export interface Frequency {
-            name: string;
-            id?: string;
-        }
-        /**
-         * Frequency.Filter
-         */
-        export interface FrequencyFilter {
-            offset?: number;
-            /**
-             * example:
-             * 100
-             */
-            limit?: number;
-            skip?: number;
-            order?: string | string[];
-            /**
-             * Frequency.Fields
-             */
-            fields?: /* Frequency.Fields */ {
-                name?: boolean;
-                id?: boolean;
-            } | ("name" | "id")[];
-            /**
-             * Frequency.IncludeFilter
-             */
-            include?: (/* Frequency.IncludeFilter.Items */ FrequencyIncludeFilterItems | string)[];
-        }
-        /**
-         * Frequency.Filter
-         */
-        export interface FrequencyFilter1 {
-            offset?: number;
-            /**
-             * example:
-             * 100
-             */
-            limit?: number;
-            skip?: number;
-            order?: string | string[];
-            /**
-             * Frequency.WhereFilter
-             */
-            where?: {
-                [name: string]: any;
-            };
-            /**
-             * Frequency.Fields
-             */
-            fields?: /* Frequency.Fields */ {
-                name?: boolean;
-                id?: boolean;
-            } | ("name" | "id")[];
-            /**
-             * Frequency.IncludeFilter
-             */
-            include?: (/* Frequency.IncludeFilter.Items */ FrequencyIncludeFilterItems | string)[];
-        }
-        /**
-         * Frequency.IncludeFilter.Items
-         */
-        export interface FrequencyIncludeFilterItems {
-            relation?: "websites";
-            scope?: /* Frequency.ScopeFilter */ FrequencyScopeFilter;
-        }
-        /**
-         * FrequencyPartial
-         * (tsType: Partial<Frequency>, schemaOptions: { partial: true })
-         */
-        export interface FrequencyPartial {
-            name?: string;
-            id?: string;
-        }
-        /**
-         * Frequency.ScopeFilter
-         */
-        export interface FrequencyScopeFilter {
-            offset?: number;
-            /**
-             * example:
-             * 100
-             */
-            limit?: number;
-            skip?: number;
-            order?: string | string[];
-            where?: {
-                [name: string]: any;
-            };
-            fields?: {
-                [name: string]: any;
-            } | string[];
-            include?: {
-                [name: string]: any;
-            }[];
-        }
-        /**
-         * FrequencyWithRelations
-         * (tsType: FrequencyWithRelations, schemaOptions: { includeRelations: true })
-         */
-        export interface FrequencyWithRelations {
-            name: string;
-            id?: string;
-            websites?: /**
-             * WebsiteWithRelations
-             * (tsType: WebsiteWithRelations, schemaOptions: { includeRelations: true })
-             */
-            WebsiteWithRelations[];
-        }
-        /**
          * loopback.Count
          */
         export interface LoopbackCount {
             count?: number;
         }
         /**
-         * NewFrequency
-         * (tsType: Omit<Frequency, 'id'>, schemaOptions: { title: 'NewFrequency', exclude: [ 'id' ] })
+         * NewPage
+         * (tsType: Omit<Page, 'id'>, schemaOptions: { title: 'NewPage', exclude: [ 'id' ] })
          */
-        export interface NewFrequency {
-            name: string;
+        export interface NewPage {
+            doc: {
+                [key: string]: any;
+            };
+            websiteId?: string;
+        }
+        /**
+         * NewPageInWebsite
+         * (tsType: @loopback/repository-json-schema#Optional<Omit<Page, 'id'>, 'websiteId'>, schemaOptions: { title: 'NewPageInWebsite', exclude: [ 'id' ], optional: [ 'websiteId' ] })
+         */
+        export interface NewPageInWebsite {
+            doc: {
+                [key: string]: any;
+            };
+            websiteId?: string;
         }
         /**
          * NewUser
@@ -149,20 +51,24 @@ declare namespace Components {
             url: string;
             pageLevels: number;
             snippet: string;
+            frequency?: number;
             userId?: string;
-            frequencyId?: string;
         }
         /**
-         * NewWebsiteInFrequency
-         * (tsType: @loopback/repository-json-schema#Optional<Omit<Website, 'id'>, 'frequencyId'>, schemaOptions: { title: 'NewWebsiteInFrequency', exclude: [ 'id' ], optional: [ 'frequencyId' ] })
+         * NewWebsiteError
+         * (tsType: Omit<WebsiteError, 'id'>, schemaOptions: { title: 'NewWebsiteError', exclude: [ 'id' ] })
          */
-        export interface NewWebsiteInFrequency {
-            name: string;
-            url: string;
-            pageLevels: number;
-            snippet: string;
-            userId?: string;
-            frequencyId?: string;
+        export interface NewWebsiteError {
+            log: string;
+            websiteId?: string;
+        }
+        /**
+         * NewWebsiteErrorInWebsite
+         * (tsType: @loopback/repository-json-schema#Optional<Omit<WebsiteError, 'id'>, 'websiteId'>, schemaOptions: { title: 'NewWebsiteErrorInWebsite', exclude: [ 'id' ], optional: [ 'websiteId' ] })
+         */
+        export interface NewWebsiteErrorInWebsite {
+            log: string;
+            websiteId?: string;
         }
         /**
          * NewWebsiteInUser
@@ -173,8 +79,88 @@ declare namespace Components {
             url: string;
             pageLevels: number;
             snippet: string;
+            frequency?: number;
             userId?: string;
-            frequencyId?: string;
+        }
+        /**
+         * Page
+         */
+        export interface Page {
+            doc: {
+                [key: string]: any;
+            };
+            id?: string;
+            websiteId?: string;
+        }
+        /**
+         * Page.Filter
+         */
+        export interface PageFilter {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            /**
+             * Page.Fields
+             */
+            fields?: /* Page.Fields */ {
+                doc?: boolean;
+                id?: boolean;
+                websiteId?: boolean;
+            } | ("doc" | "id" | "websiteId")[];
+        }
+        /**
+         * Page.Filter
+         */
+        export interface PageFilter1 {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            /**
+             * Page.WhereFilter
+             */
+            where?: {
+                [name: string]: any;
+            };
+            /**
+             * Page.Fields
+             */
+            fields?: /* Page.Fields */ {
+                doc?: boolean;
+                id?: boolean;
+                websiteId?: boolean;
+            } | ("doc" | "id" | "websiteId")[];
+        }
+        /**
+         * PagePartial
+         * (tsType: Partial<Page>, schemaOptions: { partial: true })
+         */
+        export interface PagePartial {
+            doc?: {
+                [key: string]: any;
+            };
+            id?: string;
+            websiteId?: string;
+        }
+        /**
+         * PageWithRelations
+         * (tsType: PageWithRelations, schemaOptions: { includeRelations: true })
+         */
+        export interface PageWithRelations {
+            doc: {
+                [key: string]: any;
+            };
+            id?: string;
+            websiteId?: string;
         }
         /**
          * PingResponse
@@ -313,8 +299,82 @@ declare namespace Components {
             url: string;
             pageLevels: number;
             snippet: string;
+            frequency?: number;
             userId?: string;
-            frequencyId?: string;
+        }
+        /**
+         * WebsiteError
+         */
+        export interface WebsiteError {
+            id?: string;
+            log: string;
+            websiteId?: string;
+        }
+        /**
+         * WebsiteError.Filter
+         */
+        export interface WebsiteErrorFilter {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            /**
+             * WebsiteError.Fields
+             */
+            fields?: /* WebsiteError.Fields */ {
+                id?: boolean;
+                log?: boolean;
+                websiteId?: boolean;
+            } | ("id" | "log" | "websiteId")[];
+        }
+        /**
+         * WebsiteError.Filter
+         */
+        export interface WebsiteErrorFilter1 {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            /**
+             * WebsiteError.WhereFilter
+             */
+            where?: {
+                [name: string]: any;
+            };
+            /**
+             * WebsiteError.Fields
+             */
+            fields?: /* WebsiteError.Fields */ {
+                id?: boolean;
+                log?: boolean;
+                websiteId?: boolean;
+            } | ("id" | "log" | "websiteId")[];
+        }
+        /**
+         * WebsiteErrorPartial
+         * (tsType: Partial<WebsiteError>, schemaOptions: { partial: true })
+         */
+        export interface WebsiteErrorPartial {
+            id?: string;
+            log?: string;
+            websiteId?: string;
+        }
+        /**
+         * WebsiteErrorWithRelations
+         * (tsType: WebsiteErrorWithRelations, schemaOptions: { includeRelations: true })
+         */
+        export interface WebsiteErrorWithRelations {
+            id?: string;
+            log: string;
+            websiteId?: string;
         }
         /**
          * Website.Filter
@@ -337,9 +397,13 @@ declare namespace Components {
                 url?: boolean;
                 pageLevels?: boolean;
                 snippet?: boolean;
+                frequency?: boolean;
                 userId?: boolean;
-                frequencyId?: boolean;
-            } | ("id" | "name" | "url" | "pageLevels" | "snippet" | "userId" | "frequencyId")[];
+            } | ("id" | "name" | "url" | "pageLevels" | "snippet" | "frequency" | "userId")[];
+            /**
+             * Website.IncludeFilter
+             */
+            include?: (/* Website.IncludeFilter.Items */ WebsiteIncludeFilterItems | string)[];
         }
         /**
          * Website.Filter
@@ -368,9 +432,20 @@ declare namespace Components {
                 url?: boolean;
                 pageLevels?: boolean;
                 snippet?: boolean;
+                frequency?: boolean;
                 userId?: boolean;
-                frequencyId?: boolean;
-            } | ("id" | "name" | "url" | "pageLevels" | "snippet" | "userId" | "frequencyId")[];
+            } | ("id" | "name" | "url" | "pageLevels" | "snippet" | "frequency" | "userId")[];
+            /**
+             * Website.IncludeFilter
+             */
+            include?: (/* Website.IncludeFilter.Items */ WebsiteIncludeFilterItems | string)[];
+        }
+        /**
+         * Website.IncludeFilter.Items
+         */
+        export interface WebsiteIncludeFilterItems {
+            relation?: "pages" | "websiteErrors";
+            scope?: /* Website.ScopeFilter */ WebsiteScopeFilter;
         }
         /**
          * WebsitePartial
@@ -382,8 +457,30 @@ declare namespace Components {
             url?: string;
             pageLevels?: number;
             snippet?: string;
+            frequency?: number;
             userId?: string;
-            frequencyId?: string;
+        }
+        /**
+         * Website.ScopeFilter
+         */
+        export interface WebsiteScopeFilter {
+            offset?: number;
+            /**
+             * example:
+             * 100
+             */
+            limit?: number;
+            skip?: number;
+            order?: string | string[];
+            where?: {
+                [name: string]: any;
+            };
+            fields?: {
+                [name: string]: any;
+            } | string[];
+            include?: {
+                [name: string]: any;
+            }[];
         }
         /**
          * WebsiteWithRelations
@@ -395,39 +492,49 @@ declare namespace Components {
             url: string;
             pageLevels: number;
             snippet: string;
+            frequency?: number;
             userId?: string;
-            frequencyId?: string;
+            pages?: /**
+             * PageWithRelations
+             * (tsType: PageWithRelations, schemaOptions: { includeRelations: true })
+             */
+            PageWithRelations[];
+            websiteErrors?: /**
+             * WebsiteErrorWithRelations
+             * (tsType: WebsiteErrorWithRelations, schemaOptions: { includeRelations: true })
+             */
+            WebsiteErrorWithRelations[];
         }
     }
 }
 declare namespace Paths {
-    namespace FrequencyControllerCount {
+    namespace PageControllerCount {
         namespace Parameters {
             /**
-             * Frequency.WhereFilter
+             * Page.WhereFilter
              */
             export interface Where {
                 [name: string]: any;
             }
         }
         export interface QueryParameters {
-            where?: /* Frequency.WhereFilter */ Parameters.Where;
+            where?: /* Page.WhereFilter */ Parameters.Where;
         }
         namespace Responses {
             export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
         }
     }
-    namespace FrequencyControllerCreate {
+    namespace PageControllerCreate {
         export type RequestBody = /**
-         * NewFrequency
-         * (tsType: Omit<Frequency, 'id'>, schemaOptions: { title: 'NewFrequency', exclude: [ 'id' ] })
+         * NewPage
+         * (tsType: Omit<Page, 'id'>, schemaOptions: { title: 'NewPage', exclude: [ 'id' ] })
          */
-        Components.Schemas.NewFrequency;
+        Components.Schemas.NewPage;
         namespace Responses {
-            export type $200 = /* Frequency */ Components.Schemas.Frequency;
+            export type $200 = /* Page */ Components.Schemas.Page;
         }
     }
-    namespace FrequencyControllerDeleteById {
+    namespace PageControllerDeleteById {
         namespace Parameters {
             export type Id = string;
         }
@@ -436,29 +543,29 @@ declare namespace Paths {
         }
         namespace Responses {
             /**
-             * Frequency DELETE success
+             * Page DELETE success
              */
             export type $204 = any;
         }
     }
-    namespace FrequencyControllerFind {
+    namespace PageControllerFind {
         namespace Parameters {
-            export type Filter = /* Frequency.Filter */ Components.Schemas.FrequencyFilter1;
+            export type Filter = /* Page.Filter */ Components.Schemas.PageFilter1;
         }
         export interface QueryParameters {
             filter?: Parameters.Filter;
         }
         namespace Responses {
             export type $200 = /**
-             * FrequencyWithRelations
-             * (tsType: FrequencyWithRelations, schemaOptions: { includeRelations: true })
+             * PageWithRelations
+             * (tsType: PageWithRelations, schemaOptions: { includeRelations: true })
              */
-            Components.Schemas.FrequencyWithRelations[];
+            Components.Schemas.PageWithRelations[];
         }
     }
-    namespace FrequencyControllerFindById {
+    namespace PageControllerFindById {
         namespace Parameters {
-            export type Filter = /* Frequency.Filter */ Components.Schemas.FrequencyFilter;
+            export type Filter = /* Page.Filter */ Components.Schemas.PageFilter;
             export type Id = string;
         }
         export interface PathParameters {
@@ -469,49 +576,49 @@ declare namespace Paths {
         }
         namespace Responses {
             export type $200 = /**
-             * FrequencyWithRelations
-             * (tsType: FrequencyWithRelations, schemaOptions: { includeRelations: true })
+             * PageWithRelations
+             * (tsType: PageWithRelations, schemaOptions: { includeRelations: true })
              */
-            Components.Schemas.FrequencyWithRelations;
+            Components.Schemas.PageWithRelations;
         }
     }
-    namespace FrequencyControllerReplaceById {
+    namespace PageControllerReplaceById {
         namespace Parameters {
             export type Id = string;
         }
         export interface PathParameters {
             id: Parameters.Id;
         }
-        export type RequestBody = /* Frequency */ Components.Schemas.Frequency;
+        export type RequestBody = /* Page */ Components.Schemas.Page;
         namespace Responses {
             /**
-             * Frequency PUT success
+             * Page PUT success
              */
             export type $204 = any;
         }
     }
-    namespace FrequencyControllerUpdateAll {
+    namespace PageControllerUpdateAll {
         namespace Parameters {
             /**
-             * Frequency.WhereFilter
+             * Page.WhereFilter
              */
             export interface Where {
                 [name: string]: any;
             }
         }
         export interface QueryParameters {
-            where?: /* Frequency.WhereFilter */ Parameters.Where;
+            where?: /* Page.WhereFilter */ Parameters.Where;
         }
         export type RequestBody = /**
-         * FrequencyPartial
-         * (tsType: Partial<Frequency>, schemaOptions: { partial: true })
+         * PagePartial
+         * (tsType: Partial<Page>, schemaOptions: { partial: true })
          */
-        Components.Schemas.FrequencyPartial;
+        Components.Schemas.PagePartial;
         namespace Responses {
             export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
         }
     }
-    namespace FrequencyControllerUpdateById {
+    namespace PageControllerUpdateById {
         namespace Parameters {
             export type Id = string;
         }
@@ -519,93 +626,15 @@ declare namespace Paths {
             id: Parameters.Id;
         }
         export type RequestBody = /**
-         * FrequencyPartial
-         * (tsType: Partial<Frequency>, schemaOptions: { partial: true })
+         * PagePartial
+         * (tsType: Partial<Page>, schemaOptions: { partial: true })
          */
-        Components.Schemas.FrequencyPartial;
+        Components.Schemas.PagePartial;
         namespace Responses {
             /**
-             * Frequency PATCH success
+             * Page PATCH success
              */
             export type $204 = any;
-        }
-    }
-    namespace FrequencyWebsiteControllerCreate {
-        namespace Parameters {
-            export type Id = string;
-        }
-        export interface PathParameters {
-            id: Parameters.Id;
-        }
-        export type RequestBody = /**
-         * NewWebsiteInFrequency
-         * (tsType: @loopback/repository-json-schema#Optional<Omit<Website, 'id'>, 'frequencyId'>, schemaOptions: { title: 'NewWebsiteInFrequency', exclude: [ 'id' ], optional: [ 'frequencyId' ] })
-         */
-        Components.Schemas.NewWebsiteInFrequency;
-        namespace Responses {
-            export type $200 = /* Website */ Components.Schemas.Website;
-        }
-    }
-    namespace FrequencyWebsiteControllerDelete {
-        namespace Parameters {
-            export type Id = string;
-            /**
-             * Website.WhereFilter
-             */
-            export interface Where {
-                [name: string]: any;
-            }
-        }
-        export interface PathParameters {
-            id: Parameters.Id;
-        }
-        export interface QueryParameters {
-            where?: /* Website.WhereFilter */ Parameters.Where;
-        }
-        namespace Responses {
-            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
-        }
-    }
-    namespace FrequencyWebsiteControllerFind {
-        namespace Parameters {
-            export interface Filter {
-                [name: string]: any;
-            }
-            export type Id = string;
-        }
-        export interface PathParameters {
-            id: Parameters.Id;
-        }
-        export interface QueryParameters {
-            filter?: Parameters.Filter;
-        }
-        namespace Responses {
-            export type $200 = /* Website */ Components.Schemas.Website[];
-        }
-    }
-    namespace FrequencyWebsiteControllerPatch {
-        namespace Parameters {
-            export type Id = string;
-            /**
-             * Website.WhereFilter
-             */
-            export interface Where {
-                [name: string]: any;
-            }
-        }
-        export interface PathParameters {
-            id: Parameters.Id;
-        }
-        export interface QueryParameters {
-            where?: /* Website.WhereFilter */ Parameters.Where;
-        }
-        export type RequestBody = /**
-         * WebsitePartial
-         * (tsType: Partial<Website>, schemaOptions: { partial: true })
-         */
-        Components.Schemas.WebsitePartial;
-        namespace Responses {
-            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
         }
     }
     namespace PingControllerFib {
@@ -976,6 +1005,291 @@ declare namespace Paths {
             export type $204 = any;
         }
     }
+    namespace WebsiteErrorControllerCount {
+        namespace Parameters {
+            /**
+             * WebsiteError.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface QueryParameters {
+            where?: /* WebsiteError.WhereFilter */ Parameters.Where;
+        }
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
+    namespace WebsiteErrorControllerCreate {
+        export type RequestBody = /**
+         * NewWebsiteError
+         * (tsType: Omit<WebsiteError, 'id'>, schemaOptions: { title: 'NewWebsiteError', exclude: [ 'id' ] })
+         */
+        Components.Schemas.NewWebsiteError;
+        namespace Responses {
+            export type $200 = /* WebsiteError */ Components.Schemas.WebsiteError;
+        }
+    }
+    namespace WebsiteErrorControllerDeleteById {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        namespace Responses {
+            /**
+             * WebsiteError DELETE success
+             */
+            export type $204 = any;
+        }
+    }
+    namespace WebsiteErrorControllerFind {
+        namespace Parameters {
+            export type Filter = /* WebsiteError.Filter */ Components.Schemas.WebsiteErrorFilter1;
+        }
+        export interface QueryParameters {
+            filter?: Parameters.Filter;
+        }
+        namespace Responses {
+            export type $200 = /**
+             * WebsiteErrorWithRelations
+             * (tsType: WebsiteErrorWithRelations, schemaOptions: { includeRelations: true })
+             */
+            Components.Schemas.WebsiteErrorWithRelations[];
+        }
+    }
+    namespace WebsiteErrorControllerFindById {
+        namespace Parameters {
+            export type Filter = /* WebsiteError.Filter */ Components.Schemas.WebsiteErrorFilter;
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            filter?: Parameters.Filter;
+        }
+        namespace Responses {
+            export type $200 = /**
+             * WebsiteErrorWithRelations
+             * (tsType: WebsiteErrorWithRelations, schemaOptions: { includeRelations: true })
+             */
+            Components.Schemas.WebsiteErrorWithRelations;
+        }
+    }
+    namespace WebsiteErrorControllerReplaceById {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export type RequestBody = /* WebsiteError */ Components.Schemas.WebsiteError;
+        namespace Responses {
+            /**
+             * WebsiteError PUT success
+             */
+            export type $204 = any;
+        }
+    }
+    namespace WebsiteErrorControllerUpdateAll {
+        namespace Parameters {
+            /**
+             * WebsiteError.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface QueryParameters {
+            where?: /* WebsiteError.WhereFilter */ Parameters.Where;
+        }
+        export type RequestBody = /**
+         * WebsiteErrorPartial
+         * (tsType: Partial<WebsiteError>, schemaOptions: { partial: true })
+         */
+        Components.Schemas.WebsiteErrorPartial;
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
+    namespace WebsiteErrorControllerUpdateById {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export type RequestBody = /**
+         * WebsiteErrorPartial
+         * (tsType: Partial<WebsiteError>, schemaOptions: { partial: true })
+         */
+        Components.Schemas.WebsiteErrorPartial;
+        namespace Responses {
+            /**
+             * WebsiteError PATCH success
+             */
+            export type $204 = any;
+        }
+    }
+    namespace WebsitePageControllerCreate {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export type RequestBody = /**
+         * NewPageInWebsite
+         * (tsType: @loopback/repository-json-schema#Optional<Omit<Page, 'id'>, 'websiteId'>, schemaOptions: { title: 'NewPageInWebsite', exclude: [ 'id' ], optional: [ 'websiteId' ] })
+         */
+        Components.Schemas.NewPageInWebsite;
+        namespace Responses {
+            export type $200 = /* Page */ Components.Schemas.Page;
+        }
+    }
+    namespace WebsitePageControllerDelete {
+        namespace Parameters {
+            export type Id = string;
+            /**
+             * Page.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            where?: /* Page.WhereFilter */ Parameters.Where;
+        }
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
+    namespace WebsitePageControllerFind {
+        namespace Parameters {
+            export interface Filter {
+                [name: string]: any;
+            }
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            filter?: Parameters.Filter;
+        }
+        namespace Responses {
+            export type $200 = /* Page */ Components.Schemas.Page[];
+        }
+    }
+    namespace WebsitePageControllerPatch {
+        namespace Parameters {
+            export type Id = string;
+            /**
+             * Page.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            where?: /* Page.WhereFilter */ Parameters.Where;
+        }
+        export type RequestBody = /**
+         * PagePartial
+         * (tsType: Partial<Page>, schemaOptions: { partial: true })
+         */
+        Components.Schemas.PagePartial;
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
+    namespace WebsiteWebsiteErrorControllerCreate {
+        namespace Parameters {
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export type RequestBody = /**
+         * NewWebsiteErrorInWebsite
+         * (tsType: @loopback/repository-json-schema#Optional<Omit<WebsiteError, 'id'>, 'websiteId'>, schemaOptions: { title: 'NewWebsiteErrorInWebsite', exclude: [ 'id' ], optional: [ 'websiteId' ] })
+         */
+        Components.Schemas.NewWebsiteErrorInWebsite;
+        namespace Responses {
+            export type $200 = /* WebsiteError */ Components.Schemas.WebsiteError;
+        }
+    }
+    namespace WebsiteWebsiteErrorControllerDelete {
+        namespace Parameters {
+            export type Id = string;
+            /**
+             * WebsiteError.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            where?: /* WebsiteError.WhereFilter */ Parameters.Where;
+        }
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
+    namespace WebsiteWebsiteErrorControllerFind {
+        namespace Parameters {
+            export interface Filter {
+                [name: string]: any;
+            }
+            export type Id = string;
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            filter?: Parameters.Filter;
+        }
+        namespace Responses {
+            export type $200 = /* WebsiteError */ Components.Schemas.WebsiteError[];
+        }
+    }
+    namespace WebsiteWebsiteErrorControllerPatch {
+        namespace Parameters {
+            export type Id = string;
+            /**
+             * WebsiteError.WhereFilter
+             */
+            export interface Where {
+                [name: string]: any;
+            }
+        }
+        export interface PathParameters {
+            id: Parameters.Id;
+        }
+        export interface QueryParameters {
+            where?: /* WebsiteError.WhereFilter */ Parameters.Where;
+        }
+        export type RequestBody = /**
+         * WebsiteErrorPartial
+         * (tsType: Partial<WebsiteError>, schemaOptions: { partial: true })
+         */
+        Components.Schemas.WebsiteErrorPartial;
+        namespace Responses {
+            export type $200 = /* loopback.Count */ Components.Schemas.LoopbackCount;
+        }
+    }
 }
 
 export interface OperationMethods {
@@ -988,102 +1302,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PingControllerFib.Responses.$200>
   /**
-   * FrequencyController.count
-   */
-  'FrequencyController.count'(
-    parameters?: Parameters<Paths.FrequencyControllerCount.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerCount.Responses.$200>
-  /**
-   * FrequencyWebsiteController.find
-   */
-  'FrequencyWebsiteController.find'(
-    parameters?: Parameters<Paths.FrequencyWebsiteControllerFind.PathParameters & Paths.FrequencyWebsiteControllerFind.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyWebsiteControllerFind.Responses.$200>
-  /**
-   * FrequencyWebsiteController.create
-   */
-  'FrequencyWebsiteController.create'(
-    parameters?: Parameters<Paths.FrequencyWebsiteControllerCreate.PathParameters> | null,
-    data?: Paths.FrequencyWebsiteControllerCreate.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyWebsiteControllerCreate.Responses.$200>
-  /**
-   * FrequencyWebsiteController.patch
-   */
-  'FrequencyWebsiteController.patch'(
-    parameters?: Parameters<Paths.FrequencyWebsiteControllerPatch.PathParameters & Paths.FrequencyWebsiteControllerPatch.QueryParameters> | null,
-    data?: Paths.FrequencyWebsiteControllerPatch.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyWebsiteControllerPatch.Responses.$200>
-  /**
-   * FrequencyWebsiteController.delete
-   */
-  'FrequencyWebsiteController.delete'(
-    parameters?: Parameters<Paths.FrequencyWebsiteControllerDelete.PathParameters & Paths.FrequencyWebsiteControllerDelete.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyWebsiteControllerDelete.Responses.$200>
-  /**
-   * FrequencyController.findById
-   */
-  'FrequencyController.findById'(
-    parameters?: Parameters<Paths.FrequencyControllerFindById.PathParameters & Paths.FrequencyControllerFindById.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerFindById.Responses.$200>
-  /**
-   * FrequencyController.replaceById
-   */
-  'FrequencyController.replaceById'(
-    parameters?: Parameters<Paths.FrequencyControllerReplaceById.PathParameters> | null,
-    data?: Paths.FrequencyControllerReplaceById.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerReplaceById.Responses.$204>
-  /**
-   * FrequencyController.updateById
-   */
-  'FrequencyController.updateById'(
-    parameters?: Parameters<Paths.FrequencyControllerUpdateById.PathParameters> | null,
-    data?: Paths.FrequencyControllerUpdateById.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerUpdateById.Responses.$204>
-  /**
-   * FrequencyController.deleteById
-   */
-  'FrequencyController.deleteById'(
-    parameters?: Parameters<Paths.FrequencyControllerDeleteById.PathParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerDeleteById.Responses.$204>
-  /**
-   * FrequencyController.find
-   */
-  'FrequencyController.find'(
-    parameters?: Parameters<Paths.FrequencyControllerFind.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerFind.Responses.$200>
-  /**
-   * FrequencyController.create
-   */
-  'FrequencyController.create'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: Paths.FrequencyControllerCreate.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerCreate.Responses.$200>
-  /**
-   * FrequencyController.updateAll
-   */
-  'FrequencyController.updateAll'(
-    parameters?: Parameters<Paths.FrequencyControllerUpdateAll.QueryParameters> | null,
-    data?: Paths.FrequencyControllerUpdateAll.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.FrequencyControllerUpdateAll.Responses.$200>
-  /**
    * PingController.greet
    */
   'PingController.greet'(
@@ -1091,6 +1309,70 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PingControllerGreet.Responses.$200>
+  /**
+   * PageController.count
+   */
+  'PageController.count'(
+    parameters?: Parameters<Paths.PageControllerCount.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerCount.Responses.$200>
+  /**
+   * PageController.findById
+   */
+  'PageController.findById'(
+    parameters?: Parameters<Paths.PageControllerFindById.PathParameters & Paths.PageControllerFindById.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerFindById.Responses.$200>
+  /**
+   * PageController.replaceById
+   */
+  'PageController.replaceById'(
+    parameters?: Parameters<Paths.PageControllerReplaceById.PathParameters> | null,
+    data?: Paths.PageControllerReplaceById.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerReplaceById.Responses.$204>
+  /**
+   * PageController.updateById
+   */
+  'PageController.updateById'(
+    parameters?: Parameters<Paths.PageControllerUpdateById.PathParameters> | null,
+    data?: Paths.PageControllerUpdateById.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerUpdateById.Responses.$204>
+  /**
+   * PageController.deleteById
+   */
+  'PageController.deleteById'(
+    parameters?: Parameters<Paths.PageControllerDeleteById.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerDeleteById.Responses.$204>
+  /**
+   * PageController.find
+   */
+  'PageController.find'(
+    parameters?: Parameters<Paths.PageControllerFind.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerFind.Responses.$200>
+  /**
+   * PageController.create
+   */
+  'PageController.create'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: Paths.PageControllerCreate.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerCreate.Responses.$200>
+  /**
+   * PageController.updateAll
+   */
+  'PageController.updateAll'(
+    parameters?: Parameters<Paths.PageControllerUpdateAll.QueryParameters> | null,
+    data?: Paths.PageControllerUpdateAll.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PageControllerUpdateAll.Responses.$200>
   /**
    * PingController.ping
    */
@@ -1204,6 +1486,70 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.UserControllerUpdateAll.Responses.$200>
   /**
+   * WebsiteErrorController.count
+   */
+  'WebsiteErrorController.count'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerCount.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerCount.Responses.$200>
+  /**
+   * WebsiteErrorController.findById
+   */
+  'WebsiteErrorController.findById'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerFindById.PathParameters & Paths.WebsiteErrorControllerFindById.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerFindById.Responses.$200>
+  /**
+   * WebsiteErrorController.replaceById
+   */
+  'WebsiteErrorController.replaceById'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerReplaceById.PathParameters> | null,
+    data?: Paths.WebsiteErrorControllerReplaceById.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerReplaceById.Responses.$204>
+  /**
+   * WebsiteErrorController.updateById
+   */
+  'WebsiteErrorController.updateById'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerUpdateById.PathParameters> | null,
+    data?: Paths.WebsiteErrorControllerUpdateById.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerUpdateById.Responses.$204>
+  /**
+   * WebsiteErrorController.deleteById
+   */
+  'WebsiteErrorController.deleteById'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerDeleteById.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerDeleteById.Responses.$204>
+  /**
+   * WebsiteErrorController.find
+   */
+  'WebsiteErrorController.find'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerFind.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerFind.Responses.$200>
+  /**
+   * WebsiteErrorController.create
+   */
+  'WebsiteErrorController.create'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: Paths.WebsiteErrorControllerCreate.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerCreate.Responses.$200>
+  /**
+   * WebsiteErrorController.updateAll
+   */
+  'WebsiteErrorController.updateAll'(
+    parameters?: Parameters<Paths.WebsiteErrorControllerUpdateAll.QueryParameters> | null,
+    data?: Paths.WebsiteErrorControllerUpdateAll.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteErrorControllerUpdateAll.Responses.$200>
+  /**
    * WebsiteController.count
    */
   'WebsiteController.count'(
@@ -1211,6 +1557,70 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.WebsiteControllerCount.Responses.$200>
+  /**
+   * WebsitePageController.find
+   */
+  'WebsitePageController.find'(
+    parameters?: Parameters<Paths.WebsitePageControllerFind.PathParameters & Paths.WebsitePageControllerFind.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsitePageControllerFind.Responses.$200>
+  /**
+   * WebsitePageController.create
+   */
+  'WebsitePageController.create'(
+    parameters?: Parameters<Paths.WebsitePageControllerCreate.PathParameters> | null,
+    data?: Paths.WebsitePageControllerCreate.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsitePageControllerCreate.Responses.$200>
+  /**
+   * WebsitePageController.patch
+   */
+  'WebsitePageController.patch'(
+    parameters?: Parameters<Paths.WebsitePageControllerPatch.PathParameters & Paths.WebsitePageControllerPatch.QueryParameters> | null,
+    data?: Paths.WebsitePageControllerPatch.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsitePageControllerPatch.Responses.$200>
+  /**
+   * WebsitePageController.delete
+   */
+  'WebsitePageController.delete'(
+    parameters?: Parameters<Paths.WebsitePageControllerDelete.PathParameters & Paths.WebsitePageControllerDelete.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsitePageControllerDelete.Responses.$200>
+  /**
+   * WebsiteWebsiteErrorController.find
+   */
+  'WebsiteWebsiteErrorController.find'(
+    parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerFind.PathParameters & Paths.WebsiteWebsiteErrorControllerFind.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteWebsiteErrorControllerFind.Responses.$200>
+  /**
+   * WebsiteWebsiteErrorController.create
+   */
+  'WebsiteWebsiteErrorController.create'(
+    parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerCreate.PathParameters> | null,
+    data?: Paths.WebsiteWebsiteErrorControllerCreate.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteWebsiteErrorControllerCreate.Responses.$200>
+  /**
+   * WebsiteWebsiteErrorController.patch
+   */
+  'WebsiteWebsiteErrorController.patch'(
+    parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerPatch.PathParameters & Paths.WebsiteWebsiteErrorControllerPatch.QueryParameters> | null,
+    data?: Paths.WebsiteWebsiteErrorControllerPatch.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteWebsiteErrorControllerPatch.Responses.$200>
+  /**
+   * WebsiteWebsiteErrorController.delete
+   */
+  'WebsiteWebsiteErrorController.delete'(
+    parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerDelete.PathParameters & Paths.WebsiteWebsiteErrorControllerDelete.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.WebsiteWebsiteErrorControllerDelete.Responses.$200>
   /**
    * WebsiteController.findById
    */
@@ -1280,110 +1690,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PingControllerFib.Responses.$200>
   }
-  ['/frequencies/count']: {
-    /**
-     * FrequencyController.count
-     */
-    'get'(
-      parameters?: Parameters<Paths.FrequencyControllerCount.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerCount.Responses.$200>
-  }
-  ['/frequencies/{id}/websites']: {
-    /**
-     * FrequencyWebsiteController.create
-     */
-    'post'(
-      parameters?: Parameters<Paths.FrequencyWebsiteControllerCreate.PathParameters> | null,
-      data?: Paths.FrequencyWebsiteControllerCreate.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyWebsiteControllerCreate.Responses.$200>
-    /**
-     * FrequencyWebsiteController.patch
-     */
-    'patch'(
-      parameters?: Parameters<Paths.FrequencyWebsiteControllerPatch.PathParameters & Paths.FrequencyWebsiteControllerPatch.QueryParameters> | null,
-      data?: Paths.FrequencyWebsiteControllerPatch.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyWebsiteControllerPatch.Responses.$200>
-    /**
-     * FrequencyWebsiteController.find
-     */
-    'get'(
-      parameters?: Parameters<Paths.FrequencyWebsiteControllerFind.PathParameters & Paths.FrequencyWebsiteControllerFind.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyWebsiteControllerFind.Responses.$200>
-    /**
-     * FrequencyWebsiteController.delete
-     */
-    'delete'(
-      parameters?: Parameters<Paths.FrequencyWebsiteControllerDelete.PathParameters & Paths.FrequencyWebsiteControllerDelete.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyWebsiteControllerDelete.Responses.$200>
-  }
-  ['/frequencies/{id}']: {
-    /**
-     * FrequencyController.replaceById
-     */
-    'put'(
-      parameters?: Parameters<Paths.FrequencyControllerReplaceById.PathParameters> | null,
-      data?: Paths.FrequencyControllerReplaceById.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerReplaceById.Responses.$204>
-    /**
-     * FrequencyController.updateById
-     */
-    'patch'(
-      parameters?: Parameters<Paths.FrequencyControllerUpdateById.PathParameters> | null,
-      data?: Paths.FrequencyControllerUpdateById.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerUpdateById.Responses.$204>
-    /**
-     * FrequencyController.findById
-     */
-    'get'(
-      parameters?: Parameters<Paths.FrequencyControllerFindById.PathParameters & Paths.FrequencyControllerFindById.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerFindById.Responses.$200>
-    /**
-     * FrequencyController.deleteById
-     */
-    'delete'(
-      parameters?: Parameters<Paths.FrequencyControllerDeleteById.PathParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerDeleteById.Responses.$204>
-  }
-  ['/frequencies']: {
-    /**
-     * FrequencyController.create
-     */
-    'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: Paths.FrequencyControllerCreate.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerCreate.Responses.$200>
-    /**
-     * FrequencyController.updateAll
-     */
-    'patch'(
-      parameters?: Parameters<Paths.FrequencyControllerUpdateAll.QueryParameters> | null,
-      data?: Paths.FrequencyControllerUpdateAll.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerUpdateAll.Responses.$200>
-    /**
-     * FrequencyController.find
-     */
-    'get'(
-      parameters?: Parameters<Paths.FrequencyControllerFind.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.FrequencyControllerFind.Responses.$200>
-  }
   ['/greet']: {
     /**
      * PingController.greet
@@ -1393,6 +1699,76 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PingControllerGreet.Responses.$200>
+  }
+  ['/pages/count']: {
+    /**
+     * PageController.count
+     */
+    'get'(
+      parameters?: Parameters<Paths.PageControllerCount.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerCount.Responses.$200>
+  }
+  ['/pages/{id}']: {
+    /**
+     * PageController.replaceById
+     */
+    'put'(
+      parameters?: Parameters<Paths.PageControllerReplaceById.PathParameters> | null,
+      data?: Paths.PageControllerReplaceById.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerReplaceById.Responses.$204>
+    /**
+     * PageController.updateById
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PageControllerUpdateById.PathParameters> | null,
+      data?: Paths.PageControllerUpdateById.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerUpdateById.Responses.$204>
+    /**
+     * PageController.findById
+     */
+    'get'(
+      parameters?: Parameters<Paths.PageControllerFindById.PathParameters & Paths.PageControllerFindById.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerFindById.Responses.$200>
+    /**
+     * PageController.deleteById
+     */
+    'delete'(
+      parameters?: Parameters<Paths.PageControllerDeleteById.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerDeleteById.Responses.$204>
+  }
+  ['/pages']: {
+    /**
+     * PageController.create
+     */
+    'post'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: Paths.PageControllerCreate.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerCreate.Responses.$200>
+    /**
+     * PageController.updateAll
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PageControllerUpdateAll.QueryParameters> | null,
+      data?: Paths.PageControllerUpdateAll.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerUpdateAll.Responses.$200>
+    /**
+     * PageController.find
+     */
+    'get'(
+      parameters?: Parameters<Paths.PageControllerFind.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PageControllerFind.Responses.$200>
   }
   ['/ping']: {
     /**
@@ -1518,6 +1894,76 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.UserControllerFind.Responses.$200>
   }
+  ['/website-errors/count']: {
+    /**
+     * WebsiteErrorController.count
+     */
+    'get'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerCount.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerCount.Responses.$200>
+  }
+  ['/website-errors/{id}']: {
+    /**
+     * WebsiteErrorController.replaceById
+     */
+    'put'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerReplaceById.PathParameters> | null,
+      data?: Paths.WebsiteErrorControllerReplaceById.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerReplaceById.Responses.$204>
+    /**
+     * WebsiteErrorController.updateById
+     */
+    'patch'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerUpdateById.PathParameters> | null,
+      data?: Paths.WebsiteErrorControllerUpdateById.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerUpdateById.Responses.$204>
+    /**
+     * WebsiteErrorController.findById
+     */
+    'get'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerFindById.PathParameters & Paths.WebsiteErrorControllerFindById.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerFindById.Responses.$200>
+    /**
+     * WebsiteErrorController.deleteById
+     */
+    'delete'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerDeleteById.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerDeleteById.Responses.$204>
+  }
+  ['/website-errors']: {
+    /**
+     * WebsiteErrorController.create
+     */
+    'post'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: Paths.WebsiteErrorControllerCreate.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerCreate.Responses.$200>
+    /**
+     * WebsiteErrorController.updateAll
+     */
+    'patch'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerUpdateAll.QueryParameters> | null,
+      data?: Paths.WebsiteErrorControllerUpdateAll.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerUpdateAll.Responses.$200>
+    /**
+     * WebsiteErrorController.find
+     */
+    'get'(
+      parameters?: Parameters<Paths.WebsiteErrorControllerFind.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteErrorControllerFind.Responses.$200>
+  }
   ['/websites/count']: {
     /**
      * WebsiteController.count
@@ -1527,6 +1973,74 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.WebsiteControllerCount.Responses.$200>
+  }
+  ['/websites/{id}/pages']: {
+    /**
+     * WebsitePageController.create
+     */
+    'post'(
+      parameters?: Parameters<Paths.WebsitePageControllerCreate.PathParameters> | null,
+      data?: Paths.WebsitePageControllerCreate.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsitePageControllerCreate.Responses.$200>
+    /**
+     * WebsitePageController.patch
+     */
+    'patch'(
+      parameters?: Parameters<Paths.WebsitePageControllerPatch.PathParameters & Paths.WebsitePageControllerPatch.QueryParameters> | null,
+      data?: Paths.WebsitePageControllerPatch.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsitePageControllerPatch.Responses.$200>
+    /**
+     * WebsitePageController.find
+     */
+    'get'(
+      parameters?: Parameters<Paths.WebsitePageControllerFind.PathParameters & Paths.WebsitePageControllerFind.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsitePageControllerFind.Responses.$200>
+    /**
+     * WebsitePageController.delete
+     */
+    'delete'(
+      parameters?: Parameters<Paths.WebsitePageControllerDelete.PathParameters & Paths.WebsitePageControllerDelete.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsitePageControllerDelete.Responses.$200>
+  }
+  ['/websites/{id}/website-errors']: {
+    /**
+     * WebsiteWebsiteErrorController.create
+     */
+    'post'(
+      parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerCreate.PathParameters> | null,
+      data?: Paths.WebsiteWebsiteErrorControllerCreate.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteWebsiteErrorControllerCreate.Responses.$200>
+    /**
+     * WebsiteWebsiteErrorController.patch
+     */
+    'patch'(
+      parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerPatch.PathParameters & Paths.WebsiteWebsiteErrorControllerPatch.QueryParameters> | null,
+      data?: Paths.WebsiteWebsiteErrorControllerPatch.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteWebsiteErrorControllerPatch.Responses.$200>
+    /**
+     * WebsiteWebsiteErrorController.find
+     */
+    'get'(
+      parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerFind.PathParameters & Paths.WebsiteWebsiteErrorControllerFind.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteWebsiteErrorControllerFind.Responses.$200>
+    /**
+     * WebsiteWebsiteErrorController.delete
+     */
+    'delete'(
+      parameters?: Parameters<Paths.WebsiteWebsiteErrorControllerDelete.PathParameters & Paths.WebsiteWebsiteErrorControllerDelete.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.WebsiteWebsiteErrorControllerDelete.Responses.$200>
   }
   ['/websites/{id}']: {
     /**

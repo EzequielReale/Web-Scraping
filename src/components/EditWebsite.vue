@@ -73,7 +73,8 @@ export default {
             <v-text-field v-model.number="website.frequency" label="Frecuencia (segundos)" required min="1"
                 type="number"></v-text-field>
             <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
-            <v-btn type="submit" color="primary">Guardar Cambios</v-btn>
+            <v-btn class="mr-2" type="submit" color="primary">Guardar Cambios</v-btn>
+            <v-btn class="mr-2" @click="$router.push('/websites')" color="error">Cancelar</v-btn>
         </v-form>
     </v-container>
 </template>

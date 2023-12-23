@@ -28,6 +28,18 @@ const router = createRouter({
       component: () => import('../views/EditWebsiteView.vue')
     },
     {
+      path: '/website/:id/pages',
+      name: 'website-pages',
+      beforeEnter: authGuard,
+      component: () => import('../views/PagesView.vue')
+    },
+    {
+      path: '/website/:id/errors',
+      name: 'website-errors',
+      beforeEnter: authGuard,
+      component: () => import('../views/ErrorsView.vue')
+    },
+    {
       path: '/user',
       name: 'user',
       beforeEnter: authGuard,
