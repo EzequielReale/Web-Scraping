@@ -1,10 +1,18 @@
 <script setup>
-import { useAuthStore } from '@/stores/userAuthStore.js'
 import { useAuth0 } from "@auth0/auth0-vue";
+import { ref, onMounted } from 'vue';
 
-const { user, isAuthenticated } = useAuth0();
-const authStore = useAuthStore()
-const accessToken = authStore.getToken
+const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
+const accessToken = ref(null);
+
+onMounted(async () => {
+  try {
+    const token = await getAccessTokenSilently();
+    accessToken.value = token;
+  } catch (error) {
+    console.error('Error obteniendo el token:', error);
+  }
+});
 </script>
 
 

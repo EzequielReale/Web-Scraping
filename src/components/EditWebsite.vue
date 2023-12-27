@@ -3,6 +3,7 @@ import WebsiteService from '../services/WebsiteService';
 import { useAuth0 } from "@auth0/auth0-vue";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { isUri } from 'valid-url'
 
 export default {
     setup() {
@@ -36,9 +37,8 @@ export default {
 
         const editWebsite = async () => {
             // Validación de campos
-            if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) {
-                return alert('Debe llenar todos los campos correctamente');
-            }
+            if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) return alert('Debe llenar correctamente todos los campos');    
+            if (!isUri(website.value.url)) return alert('Debe ingresar una URL válida');
 
             const updatedWebsite = {
                 id: router.currentRoute.value.params.id,
