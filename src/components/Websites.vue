@@ -1,23 +1,20 @@
 <script setup>
-import WebsiteService from "../services/WebsiteService";
 import { ref, onBeforeMount } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { client } from "../types/ClientAPI";
+import { useAuth0 } from "@auth0/auth0-vue";
 
-const route = useRoute();
+const user = useAuth0().user.value;
 const router = useRouter();
 
 const websites = ref({})
 const error = ref(false)
 const success = ref(false)
 
-
 function setWebsites() {
-  //WebsiteService.getWebsites().then(
-  //  result => websites.value = result
-  //)
   client["WebsiteController.find"]().then(
-    result => websites.value = result.data
+    result => websites.value = result.data.filter(website => website.userId.localeCompare(user.sub) === 0),
+    () => error.value = true
   )
 }
 
@@ -34,10 +31,20 @@ function editWebsite(website) {
 }
 
 function deleteWebsite(id) {
-  WebsiteService.deleteWebsite(id).then(
+  client["WebsitePageController.delete"](id).then(
+    () => { success.value = true },
+    () => error.value = true
+  )
+
+  client["WebsiteWebsiteErrorController.delete"](id).then(
+    () => { success.value = true },
+    () => error.value = true
+  )
+
+  client["WebsiteController.deleteById"](id).then(
     () => {
-      success.value = true
       setWebsites()
+      success.value = true
     },
     () => error.value = true
   )
@@ -54,11 +61,12 @@ function seeErrors(website) {
 </script>
 
 <template>
-  <v-container fluid class="align-center justify-center" style="width: 40vh;">
-    <h1 class="display-2 mb-4">Tus Sitios Web</h1>
+  <v-container fluid class="align-center justify-center" style="width: 60vh;">
+    <h1 class="display-2">¡Hola de nuevo {{ user.name }}!</h1>
     <v-sheet width="570" class="mx-auto">
       <v-list>
         <v-list-item-group v-if="websites.length > 0">
+          <h1 class="display-2 mb-7">Aquí están tus Sitios Web:</h1>
           <v-list-item v-for="website in websites" :key="website.id" class="website-list-item">
             <v-list-item-icon>
               <v-icon>mdi-web</v-icon>
@@ -84,7 +92,7 @@ function seeErrors(website) {
           </v-list-item>
         </v-list-item-group>
         <v-alert v-else dense outlined color="info">
-          No se encontraron sitios web.
+          Aún no tienes sitios web. ¿Por qué no empiezas agregando uno?
         </v-alert>
       </v-list>
     </v-sheet>

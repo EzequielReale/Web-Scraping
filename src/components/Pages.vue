@@ -65,7 +65,7 @@ function visitPage(url) {
                 </v-list-item-group>
                 <v-list-item v-else>
                     <v-list-item-content>
-                        <v-list-item-title class="headline font-weight-bold">No hay páginas</v-list-item-title>
+                        <v-list-item-title class="headline font-weight-bold">Lo sentimos, no hay visitas para mostrarte<v-icon>mdi-emoticon-cry-outline</v-icon></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>

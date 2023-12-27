@@ -1,67 +1,80 @@
 <script>
 import WebsiteService from '../services/WebsiteService';
+import { useAuth0 } from "@auth0/auth0-vue";
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
-    data() {
-        return {
-            website: {
-                name: '',
-                url: '',
-                pageLevels: 0,
-                frequency: 0,
-                snippet: '',
-            },
-        };
-    },
-    created() {
-        // Carga los datos del sitio web para editar
-        const websiteId = this.$route.params.id;
+    setup() {
+        const router = useRouter();
+        const { user } = useAuth0();
 
-        WebsiteService.getWebsite(websiteId)
-            .then((website) => {
-                this.website = {
-                    name: website.name,
-                    url: website.url,
-                    pageLevels: website.pageLevels,
-                    frequency: Number(website.frequency),
-                    snippet: website.snippet,
+        const website = ref({
+            name: '',
+            url: '',
+            pageLevels: 0,
+            frequency: 0,
+            snippet: '',
+        });
+
+        const getWebsiteData = async () => {
+            const websiteId = router.currentRoute.value.params.id;
+
+            try {
+                const websiteData = await WebsiteService.getWebsite(websiteId);
+                website.value = {
+                    name: websiteData.name,
+                    url: websiteData.url,
+                    pageLevels: websiteData.pageLevels,
+                    frequency: Number(websiteData.frequency),
+                    snippet: websiteData.snippet,
                 };
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.error('Error:', error);
-            });
-    },
-    methods: {
-        editWebsite() {
+            }
+        };
+
+        const editWebsite = async () => {
             // Validación de campos
-            if (!this.website.name || !this.website.url || this.website.pageLevels <= 0 || this.website.pageLevels > 99 || this.website.frequency < 1 || !this.website.snippet) {
+            if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) {
                 return alert('Debe llenar todos los campos correctamente');
             }
 
-            // Crea un objeto con los datos editados del sitio web
             const updatedWebsite = {
-                id: this.$route.params.id,
-                name: this.website.name,
-                url: this.website.url,
-                pageLevels: this.website.pageLevels,
-                frequency: this.website.frequency,
-                snippet: this.website.snippet,
+                id: router.currentRoute.value.params.id,
+                name: website.value.name,
+                url: website.value.url,
+                pageLevels: website.value.pageLevels,
+                frequency: website.value.frequency,
+                snippet: website.value.snippet,
+                userId: user.value.sub,
             };
 
-            // Llama al servicio para actualizar el sitio web
-            WebsiteService.updateWebsite(updatedWebsite)
-                .then(() => {
-                    this.$router.push('/websites');
-                })
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-        },
+            try {
+                await WebsiteService.updateWebsite(updatedWebsite);
+                router.push('/websites');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+
+        const goToWebsites = () => {
+            router.push('/websites');
+        };
+
+        return {
+            website,
+            getWebsiteData,
+            editWebsite,
+            goToWebsites,
+        };
+    },
+    mounted() {
+        this.getWebsiteData();
     },
 };
 </script>
-
-
+  
 <template>
     <v-container fluid class="align-center justify-center" style="width: 80vh;">
         <h1 class="display-2 mb-4">Editar Sitio Web</h1>
@@ -74,7 +87,7 @@ export default {
                 type="number"></v-text-field>
             <v-textarea v-model="website.snippet" label="Snippet" required></v-textarea>
             <v-btn class="mr-2" type="submit" color="primary">Guardar Cambios</v-btn>
-            <v-btn class="mr-2" @click="$router.push('/websites')" color="error">Cancelar</v-btn>
+            <v-btn class="mr-2" @click="goToWebsites" color="error">Cancelar</v-btn>
         </v-form>
     </v-container>
 </template>
