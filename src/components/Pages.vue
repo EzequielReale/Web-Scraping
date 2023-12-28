@@ -8,6 +8,7 @@ const router = useRouter();
 
 const websiteInfo = ref({});
 const pages = ref({})
+const copyOfPages = ref({})
 
 function getPagesByWebsiteId(websiteId) {
     return client["WebsitePageController.find"](websiteId)
@@ -30,18 +31,42 @@ function getWebsiteInfo(websiteId) {
 onBeforeMount(() => {
     getWebsiteInfo(route.params.id);
     getPagesByWebsiteId(route.params.id).then(
-        result => pages.value = result
-    )
+        result => {
+            pages.value = result,
+            copyOfPages.value = result
+        })
 });
 
 function visitPage(url) {
     window.open(url, "_blank");
 }
 
+function filterByName(string) {
+    let filteredPages = copyOfPages.value.filter(page => page.doc.url.toLowerCase().includes(string.toLowerCase()))
+    filteredPages = filteredPages.concat(copyOfPages.value.filter(page => page.doc.title.toLowerCase().includes(string.toLowerCase())));
+    pages.value = filteredPages;
+}
+
+function resetFilter() {
+    pages.value = copyOfPages.value;
+}
+
 </script>
 
 <template>
     <v-container fluid class="align-center justify-center" style="width: 40vh;">
+
+        <v-row class="mb-4">
+            <v-col cols="10">
+                <v-text-field v-model="search" label="Buscar" append-icon="mdi-magnify"
+                    @click:append="filterByName(search)"></v-text-field>
+            </v-col>
+
+            <v-col cols="1">
+                <v-btn @click="resetFilter"><v-icon>mdi-refresh</v-icon></v-btn>
+            </v-col>
+        </v-row>
+
         <h1 class="display-2 mb-4">Páginas del sitio {{ websiteInfo.name }}:</h1>
         <v-sheet width="1100" class="mx-auto">
             <v-list>
@@ -57,15 +82,16 @@ function visitPage(url) {
                         </v-list-item-content>
                         <div>
                             <v-btn @click="visitPage(page.doc.url)" color="primary">
-                            Visitar <v-icon>mdi-search-web</v-icon>
-                        </v-btn>
+                                Visitar <v-icon>mdi-search-web</v-icon>
+                            </v-btn>
                         </div>
-                        
+
                     </v-list-item>
                 </v-list-item-group>
                 <v-list-item v-else>
                     <v-list-item-content>
-                        <v-list-item-title class="headline font-weight-bold">Lo sentimos, no hay visitas para mostrarte<v-icon>mdi-emoticon-cry-outline</v-icon></v-list-item-title>
+                        <v-list-item-title class="headline font-weight-bold">Lo sentimos, no hay visitas para
+                            mostrarte<v-icon>mdi-emoticon-cry-outline</v-icon></v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
             </v-list>
