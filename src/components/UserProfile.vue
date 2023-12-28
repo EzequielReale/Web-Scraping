@@ -23,13 +23,13 @@ onMounted(async () => {
       <v-row justify="center">
           <v-card elevation="2">
                 <v-col>
-                  <v-avatar size="95">
-                    <img :src="user.picture" alt="Profile Image" class="center"/>
+                  <v-avatar size="95" class="mx-auto">
+                    <img :src="user.picture" alt="Profile Image" class="d-block"/>
                   </v-avatar>
                   <div class="text-center">
                     <h2 class="text-h5">{{ user.name }}</h2>
                     <div>{{ user.email }}</div>
-                    <div>Token de Usuario: {{ accessToken }}</div>
+                    <div style="word-wrap: break-word">Token de Usuario: {{ accessToken }}</div>
                   </div>
                 </v-col>
           </v-card>
