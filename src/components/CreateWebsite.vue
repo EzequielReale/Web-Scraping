@@ -1,53 +1,48 @@
-<script>
+<script setup>
 import WebsiteService from '../services/WebsiteService';
 import { useAuth0 } from "@auth0/auth0-vue";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { isUri } from 'valid-url'
 
-export default {
-  setup() {
-    const { user } = useAuth0();
-    const router = useRouter();
+const { user } = useAuth0();
+const router = useRouter();
 
-    const website = ref({
-      name: '',
-      url: '',
-      pageLevels: 1,
-      frequency: 1,
-      snippet: '(cheerio)=>{\nreturn {title:cheerio("title").text()}\n}',
-    });
+const website = ref({
+  name: '',
+  url: '',
+  pageLevels: 1,
+  frequency: 1,
+  snippet: '(cheerio)=>{\nreturn {title:cheerio("title").text()}\n}',
+});
 
-    const addWebsite = async () => {
-      // Validación de campos
-      if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) return alert('Debe llenar correctamente todos los campos');    
-      if (!isUri(website.value.url)) return alert('Debe ingresar una URL válida');
+const addWebsite = async () => {
+  // Validación de campos
+  if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) {
+    return alert('Debe llenar correctamente todos los campos');
+  }
+  if (!isUri(website.value.url)) {
+    return alert('Debe ingresar una URL válida');
+  }
 
-      const newWebsite = {
-        name: website.value.name,
-        url: website.value.url,
-        pageLevels: website.value.pageLevels,
-        frequency: website.value.frequency,
-        snippet: website.value.snippet,
-        userId: user.value.sub,
-      };
+  const newWebsite = {
+    name: website.value.name,
+    url: website.value.url,
+    pageLevels: website.value.pageLevels,
+    frequency: website.value.frequency,
+    snippet: website.value.snippet,
+    userId: user.value.sub,
+  };
 
-      try {
-        await WebsiteService.createWebsite(newWebsite);
-        router.push('/websites');
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    // Retorna las variables y funciones que quieres exponer al componente
-    return {
-      website,
-      addWebsite,
-    };
-  },
+  try {
+    await WebsiteService.createWebsite(newWebsite);
+    router.push('/websites');
+  } catch (error) {
+    console.error('Error:', error);
+  }
 };
 </script>
+
 
 <template>
   <v-container fluid class="align-center justify-center" style="width: 80vh;">

@@ -42,8 +42,7 @@ function visitPage(url) {
 }
 
 function filterByName(string) {
-    let filteredPages = copyOfPages.value.filter(page => page.doc.url.toLowerCase().includes(string.toLowerCase()))
-    filteredPages = filteredPages.concat(copyOfPages.value.filter(page => page.doc.title.toLowerCase().includes(string.toLowerCase())));
+    let filteredPages = copyOfPages.value.filter(page => page.doc.url.toLowerCase().includes(string.toLowerCase()) || page.doc.title.toLowerCase().includes(string.toLowerCase()))
     pages.value = filteredPages;
 }
 

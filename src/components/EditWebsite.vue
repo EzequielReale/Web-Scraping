@@ -1,79 +1,75 @@
-<script>
+<script setup>
 import WebsiteService from '../services/WebsiteService';
 import { useAuth0 } from "@auth0/auth0-vue";
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { isUri } from 'valid-url'
+import { isUri } from 'valid-url';
 
-export default {
-    setup() {
-        const router = useRouter();
-        const { user } = useAuth0();
+const router = useRouter();
+const { user } = useAuth0();
 
-        const website = ref({
-            name: '',
-            url: '',
-            pageLevels: 0,
-            frequency: 0,
-            snippet: '',
-        });
+const website = ref({
+  name: '',
+  url: '',
+  pageLevels: 0,
+  frequency: 0,
+  snippet: '',
+});
 
-        const getWebsiteData = async () => {
-            const websiteId = router.currentRoute.value.params.id;
+const getWebsiteData = async () => {
+  const websiteId = router.currentRoute.value.params.id;
 
-            try {
-                const websiteData = await WebsiteService.getWebsite(websiteId);
-                website.value = {
-                    name: websiteData.name,
-                    url: websiteData.url,
-                    pageLevels: websiteData.pageLevels,
-                    frequency: Number(websiteData.frequency),
-                    snippet: websiteData.snippet,
-                };
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        };
-
-        const editWebsite = async () => {
-            // Validación de campos
-            if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) return alert('Debe llenar correctamente todos los campos');    
-            if (!isUri(website.value.url)) return alert('Debe ingresar una URL válida');
-
-            const updatedWebsite = {
-                id: router.currentRoute.value.params.id,
-                name: website.value.name,
-                url: website.value.url,
-                pageLevels: website.value.pageLevels,
-                frequency: website.value.frequency,
-                snippet: website.value.snippet,
-                userId: user.value.sub,
-            };
-
-            try {
-                await WebsiteService.updateWebsite(updatedWebsite);
-                router.push('/websites');
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        };
-
-        const goToWebsites = () => {
-            router.push('/websites');
-        };
-
-        return {
-            website,
-            getWebsiteData,
-            editWebsite,
-            goToWebsites,
-        };
-    },
-    mounted() {
-        this.getWebsiteData();
-    },
+  try {
+    const websiteData = await WebsiteService.getWebsite(websiteId);
+    website.value = {
+      name: websiteData.name,
+      url: websiteData.url,
+      pageLevels: websiteData.pageLevels,
+      frequency: Number(websiteData.frequency),
+      snippet: websiteData.snippet,
+    };
+  } catch (error) {
+    console.error('Error:', error);
+  }
 };
+
+const editWebsite = async () => {
+  // Validación de campos
+  if (!website.value.name || !website.value.url || website.value.pageLevels <= 0 || website.value.pageLevels > 99 || website.value.frequency < 1 || !website.value.snippet) {
+    return alert('Debe llenar correctamente todos los campos');
+  }
+  if (!isUri(website.value.url)) {
+    return alert('Debe ingresar una URL válida');
+  }
+
+  const updatedWebsite = {
+    id: router.currentRoute.value.params.id,
+    name: website.value.name,
+    url: website.value.url,
+    pageLevels: website.value.pageLevels,
+    frequency: website.value.frequency,
+    snippet: website.value.snippet,
+    userId: user.value.sub,
+  };
+
+  try {
+    await WebsiteService.updateWebsite(updatedWebsite);
+    router.push('/websites');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+const goToWebsites = () => {
+  router.push('/websites');
+};
+
+onMounted(() => {
+  getWebsiteData();
+});
+
 </script>
+
   
 <template>
     <v-container fluid class="align-center justify-center" style="width: 80vh;">
