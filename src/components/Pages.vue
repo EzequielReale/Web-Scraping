@@ -42,7 +42,12 @@ function visitPage(url) {
 }
 
 function filterByName(string) {
-    let filteredPages = copyOfPages.value.filter(page => page.doc.url.toLowerCase().includes(string.toLowerCase()) || page.doc.title.toLowerCase().includes(string.toLowerCase()))
+    let filteredPages = copyOfPages.value.filter(page => {
+        const title = page.doc.title ? page.doc.title.toLowerCase() : '';
+        const body = page.doc.body ? page.doc.body.toLowerCase() : '';
+
+        return page.doc.url.toLowerCase().includes(string.toLowerCase()) || title.includes(string.toLowerCase()) || body.includes(string.toLowerCase());
+    });
     pages.value = filteredPages;
 }
 

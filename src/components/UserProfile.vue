@@ -15,7 +15,6 @@ onMounted(async () => {
 });
 </script>
 
-
 <template>
   <v-container>
     <pre v-if="isAuthenticated">
