@@ -58,10 +58,10 @@ function resetFilter() {
 </script>
 
 <template>
-    <v-container fluid class="align-center justify-center" style="width: 40vh;">
+    <v-container fluid class="align-center justify-center" style="width: 90vh;">
 
         <v-row class="mb-4">
-            <v-col cols="10">
+            <v-col cols="6">
                 <v-text-field v-model="search" label="Buscar" append-icon="mdi-magnify"
                     @click:append="filterByName(search)"></v-text-field>
             </v-col>

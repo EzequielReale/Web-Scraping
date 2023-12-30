@@ -63,7 +63,7 @@ function seeErrors(website) {
 <template>
   <v-container fluid class="align-center justify-center" style="width: 60vh;">
     <h1 class="display-2">¡Hola de nuevo {{ user.name }}!</h1>
-    <v-sheet width="570" class="mx-auto">
+    <v-sheet width="600" class="mx-auto">
       <v-list>
         <v-list-item-group v-if="websites.length > 0">
           <h1 class="display-2 mb-7">Aquí están tus Sitios Web:</h1>
