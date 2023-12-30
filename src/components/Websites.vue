@@ -31,16 +31,6 @@ function editWebsite(website) {
 }
 
 function deleteWebsite(id) {
-  client["WebsitePageController.delete"](id).then(
-    () => success.value = true,
-    () => error.value = true
-  )
-
-  client["WebsiteWebsiteErrorController.delete"](id).then(
-    () => success.value = true,
-    () => error.value = true
-  )
-
   client["WebsiteController.deleteById"](id).then(
     () => {
       setWebsites()
