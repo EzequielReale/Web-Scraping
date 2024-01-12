@@ -97,15 +97,6 @@ function resetFilter() {
   margin-bottom: 10px;
 }
 
-.error-content {
-  max-width: mx-auto;
-  /* Adjust the max-width according to your design */
-  word-break: break-word;
-  /* Allow long words to break onto the next line */
-  white-space: pre-wrap;
-  /* Wrap the text and preserve line breaks */
-}
-
 .headline {
   font-size: 24px;
   color: #333;

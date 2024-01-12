@@ -113,8 +113,6 @@ function resetFilter() {
 
 .headline {
     font-size: 24px;
-    /* Tamaño de fuente personalizado */
     color: #333;
-    /* Color de fuente personalizado */
 }
 </style>

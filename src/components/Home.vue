@@ -6,19 +6,3 @@
     </v-sheet>
   </v-container>
 </template>
-  
-<style scoped>
-.website-list-item {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-}
-
-.headline {
-  font-size: 24px;
-  /* Tamaño de fuente personalizado */
-  color: #333;
-  /* Color de fuente personalizado */
-}
-</style>
