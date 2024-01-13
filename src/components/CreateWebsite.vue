@@ -1,9 +1,9 @@
 <script setup>
-import WebsiteService from '../services/WebsiteService';
 import { useAuth0 } from "@auth0/auth0-vue";
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { isUri } from 'valid-url'
+import { client } from '../types/ClientAPI';
 
 const { user } = useAuth0();
 const router = useRouter();
@@ -35,7 +35,7 @@ const addWebsite = async () => {
   };
 
   try {
-    await WebsiteService.createWebsite(newWebsite);
+    await client["WebsiteController.create"](null, newWebsite);
     router.push('/websites');
   } catch (error) {
     console.error('Error:', error);

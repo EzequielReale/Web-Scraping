@@ -1,9 +1,9 @@
 <script setup>
-import WebsiteService from '../services/WebsiteService';
 import { useAuth0 } from "@auth0/auth0-vue";
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import { isUri } from 'valid-url';
+import { client } from '../types/ClientAPI';
 
 const router = useRouter();
 const { user } = useAuth0();
@@ -20,14 +20,8 @@ const getWebsiteData = async () => {
   const websiteId = router.currentRoute.value.params.id;
 
   try {
-    const websiteData = await WebsiteService.getWebsite(websiteId);
-    website.value = {
-      name: websiteData.name,
-      url: websiteData.url,
-      pageLevels: websiteData.pageLevels,
-      frequency: Number(websiteData.frequency),
-      snippet: websiteData.snippet,
-    };
+    const websiteData = await client["WebsiteController.findById"](websiteId);
+    website.value = websiteData.data;
   } catch (error) {
     console.error('Error:', error);
   }
@@ -53,7 +47,7 @@ const editWebsite = async () => {
   };
 
   try {
-    await WebsiteService.updateWebsite(updatedWebsite);
+    await client["WebsiteController.updateById"](updatedWebsite.id, updatedWebsite);
     router.push('/websites');
   } catch (error) {
     console.error('Error:', error);
@@ -64,7 +58,7 @@ const goToWebsites = () => {
   router.push('/websites');
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   getWebsiteData();
 });
 
