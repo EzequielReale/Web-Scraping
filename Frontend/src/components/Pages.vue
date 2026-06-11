@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { client } from "../types/ClientAPI";
 
@@ -10,6 +10,16 @@ const websiteInfo = ref({});
 const pages = ref([]);
 const copyOfPages = ref([]);
 const search = ref('');
+
+const loading = ref(true);
+const currentPage = ref(1);
+const itemsPerPage = ref(10);
+
+const paginatedPages = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return pages.value.slice(start, end);
+});
 
 function getPagesByWebsiteId(websiteId) {
     return client["WebsitePageController.find"](websiteId)
@@ -31,13 +41,16 @@ function getWebsiteInfo(websiteId) {
 }
 
 onBeforeMount(() => {
+    loading.value = true;
     getWebsiteInfo(route.params.id);
     getPagesByWebsiteId(route.params.id).then(
         result => {
             pages.value = result;
             copyOfPages.value = result;
         }
-    );
+    ).finally(() => {
+        loading.value = false;
+    });
 });
 
 function visitPage(url) {
@@ -45,6 +58,7 @@ function visitPage(url) {
 }
 
 function filterByName(string) {
+    currentPage.value = 1;
     if (!string) {
         resetFilter();
         return;
@@ -60,6 +74,7 @@ function filterByName(string) {
 }
 
 function resetFilter() {
+    currentPage.value = 1;
     search.value = '';
     pages.value = copyOfPages.value;
 }
@@ -114,8 +129,19 @@ function resetFilter() {
       </v-row>
     </v-card>
 
+    <!-- Loading State -->
+    <div v-if="loading" class="text-center py-12">
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        size="64"
+        class="mb-4"
+      ></v-progress-circular>
+      <h3 class="text-h5 text-grey-darken-2 font-weight-bold">Cargando páginas...</h3>
+    </div>
+
     <!-- Empty State -->
-    <div v-if="pages.length === 0" class="text-center py-12">
+    <div v-else-if="pages.length === 0" class="text-center py-12">
       <v-icon size="80" color="grey-lighten-1" class="mb-4">mdi-file-document-off-outline</v-icon>
       <h3 class="text-h5 text-grey-darken-2 font-weight-bold">No se encontraron páginas</h3>
       <p class="text-body-1 text-grey-darken-1 mt-2">
@@ -126,7 +152,7 @@ function resetFilter() {
     <!-- Pages List -->
     <v-row v-else>
       <v-col
-        v-for="page in pages"
+        v-for="page in paginatedPages"
         :key="page.id"
         cols="12"
       >
@@ -177,6 +203,17 @@ function resetFilter() {
         </v-card>
       </v-col>
     </v-row>
+
+    <!-- Pagination -->
+    <div v-if="pages.length > itemsPerPage" class="d-flex justify-center mt-6">
+      <v-pagination
+        v-model="currentPage"
+        :length="Math.ceil(pages.length / itemsPerPage)"
+        rounded="xl"
+        active-color="primary"
+        density="comfortable"
+      ></v-pagination>
+    </div>
   </v-container>
 </template>
 
