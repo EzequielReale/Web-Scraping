@@ -1,5 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from "@auth0/auth0-vue";
+import { useAuthStore } from '@/stores/userAuthStore.js'
+
+const authGuard = (to, from, next) => {
+  const authStore = useAuthStore();
+  const hasToken = !!localStorage.getItem('google_id_token') || authStore.isAuthenticated;
+  if (hasToken) {
+    next();
+  } else {
+    next('/');
+  }
+};
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -1,14 +1,14 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { client } from "../types/ClientAPI";
 
 const route = useRoute();
-const router = useRouter();
 
-const webErrors = ref({});
-const copyOfWebErrors = ref({});
+const webErrors = ref([]);
+const copyOfWebErrors = ref([]);
 const websiteInfo = ref({});
+const search = ref('');
 
 function getErrorsById(websiteId) {
   return client["WebsiteWebsiteErrorController.find"](websiteId)
@@ -37,68 +37,131 @@ onBeforeMount(() => {
 });
 
 function filterByName(string) {
-  let filteredWebErrors = copyOfWebErrors.value.filter(webError => webError.log.toLowerCase().includes(string.toLowerCase()))
+  if (!string) {
+    resetFilter();
+    return;
+  }
+  let filteredWebErrors = copyOfWebErrors.value.filter(webError => 
+    webError.log && webError.log.toLowerCase().includes(string.toLowerCase())
+  );
   webErrors.value = filteredWebErrors;
 }
 
 function resetFilter() {
+  search.value = '';
   webErrors.value = copyOfWebErrors.value;
 }
 </script>
 
 <template>
-  <v-container fluid class="align-center justify-center" style="width: 40vh;">
+  <v-container class="py-8 px-6" max-width="1200">
+    <!-- Header -->
+    <div class="d-flex align-center justify-space-between mb-6">
+      <div class="d-flex align-center">
+        <v-btn icon="mdi-arrow-left" variant="text" color="secondary" class="mr-3" to="/websites"></v-btn>
+        <div>
+          <h1 class="text-h4 font-weight-black text-secondary">Errores de {{ websiteInfo.name || 'Cargando...' }}</h1>
+          <p class="text-body-2 text-grey-darken-1">{{ websiteInfo.url }}</p>
+        </div>
+      </div>
+    </div>
 
-    <v-row class="mb-4">
-      <v-col cols="10">
-        <v-text-field v-model="search" label="Buscar" append-icon="mdi-magnify"
-          @click:append="filterByName(search)"></v-text-field>
-      </v-col>
+    <!-- Search/Filter Bar -->
+    <v-card class="rounded-xl border-light pa-4 mb-6" variant="flat" border>
+      <v-row class="align-center" dense>
+        <v-col cols="12" sm="8" md="9">
+          <v-text-field
+            v-model="search"
+            label="Buscar errores por contenido..."
+            variant="outlined"
+            density="comfortable"
+            prepend-inner-icon="mdi-magnify"
+            hide-details
+            @keyup.enter="filterByName(search)"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="4" md="3" class="d-flex gap-2 justify-end">
+          <v-btn
+            color="primary"
+            variant="elevated"
+            rounded="lg"
+            class="font-weight-bold"
+            @click="filterByName(search)"
+          >
+            Buscar
+          </v-btn>
+          <v-btn
+            color="secondary"
+            variant="outlined"
+            icon="mdi-refresh"
+            rounded="lg"
+            class="ml-2"
+            @click="resetFilter"
+          ></v-btn>
+        </v-col>
+      </v-row>
+    </v-card>
 
-      <v-col cols="1">
-        <v-btn @click="resetFilter"><v-icon>mdi-refresh</v-icon></v-btn>
+    <!-- Empty State / Success -->
+    <div v-if="webErrors.length === 0" class="text-center py-12">
+      <v-avatar color="success-lighten-5" size="100" class="mb-4">
+        <v-icon size="48" color="success">mdi-party-popper</v-icon>
+      </v-avatar>
+      <h3 class="text-h5 text-grey-darken-2 font-weight-bold">¡Hurra! No hay errores</h3>
+      <p class="text-body-1 text-grey-darken-1 mt-2">
+        El raspador está procesando el sitio web sin inconvenientes.
+      </p>
+    </div>
+
+    <!-- Errors List -->
+    <v-row v-else>
+      <v-col
+        v-for="webError in webErrors"
+        :key="webError.id"
+        cols="12"
+      >
+        <v-card class="rounded-xl border-error pa-5" variant="flat" border>
+          <div class="d-flex align-center mb-3">
+            <v-avatar color="error-lighten-5" size="40" class="mr-3">
+              <v-icon color="error" size="20">mdi-alert-circle</v-icon>
+            </v-avatar>
+            <div>
+              <h3 class="text-h6 font-weight-bold text-error">
+                Error de Procesamiento
+              </h3>
+              <div class="text-caption text-grey-darken-1 mt-n1">
+                {{ websiteInfo.url }}
+              </div>
+            </div>
+          </div>
+
+          <v-divider class="my-3 opacity-50"></v-divider>
+
+          <div class="text-subtitle-2 font-weight-bold text-secondary mb-1">Detalle del log:</div>
+          <pre class="error-log-pre">{{ webError.log }}</pre>
+        </v-card>
       </v-col>
     </v-row>
-
-    <h1 class="display-2 mb-4">Errores del sitio {{ websiteInfo.name }}:</h1>
-    <v-sheet width="800" class="mx-auto">
-      <v-list>
-        <v-list-item-group v-if="webErrors.length > 0">
-          <v-list-item v-for="webError in webErrors" :key="webError.id" class="website-list-item">
-            <v-list-item-icon>
-              <v-icon>mdi-alert</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content class="mx-auto">
-              <v-list-item-title class="headline font-weight-bold">
-                Error al procesar el sitio {{ websiteInfo.name }}
-              </v-list-item-title>
-              <v-list-item-subtitle class="caption">{{ websiteInfo.url }}</v-list-item-subtitle>
-              <v-list-item-text class="caption">{{ webError.log }}</v-list-item-text>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
-        <v-list-item v-else>
-          <v-list-item-content>
-            <v-list-item-title class="headline font-weight-bold">
-              ¡Hurra! No hay errores para mostrar<v-icon>mdi-party-popper</v-icon>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-sheet>
   </v-container>
 </template>
 
 <style scoped>
-.website-list-item {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
+.border-error {
+  border: 1px solid #fee2e2 !important;
+  background-color: #fef2f2 !important;
 }
 
-.headline {
-  font-size: 24px;
-  color: #333;
+.error-log-pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  background-color: #0f172a;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #f87171;
+  max-height: 250px;
+  overflow-y: auto;
+  line-height: 1.5;
 }
 </style>

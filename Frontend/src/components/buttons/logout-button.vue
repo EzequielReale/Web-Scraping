@@ -1,19 +1,23 @@
 <script setup>
-import { useAuth0 } from "@auth0/auth0-vue";
+import { useAuthStore } from '@/stores/userAuthStore.js';
+import { client } from '@/types/ClientAPI';
 
-const { logout } = useAuth0();
+const authStore = useAuthStore();
 
-const handleLogout = () =>
-    logout({
-        logoutParams: {
-            returnTo: window.location.origin,
-        }
-    });
+const handleLogout = () => {
+  authStore.logout();
+  localStorage.removeItem('google_id_token');
+  localStorage.removeItem('google_user_data');
+  delete client.defaults.headers.common['Authorization'];
+  if (typeof google !== 'undefined') {
+    google.accounts.id.disableAutoSelect();
+  }
+  window.location.href = '/';
+};
 </script>
    
-   
 <template>
-    <v-btn icon @click="handleLogout"><v-icon>mdi-logout</v-icon></v-btn>
+  <v-btn variant="text" color="error" icon @click="handleLogout" title="Cerrar Sesión">
+    <v-icon>mdi-logout</v-icon>
+  </v-btn>
 </template>
-   
-   

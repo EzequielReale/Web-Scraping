@@ -7,14 +7,16 @@ const route = useRoute();
 const router = useRouter();
 
 const websiteInfo = ref({});
-const pages = ref({})
-const copyOfPages = ref({})
+const pages = ref([]);
+const copyOfPages = ref([]);
+const search = ref('');
 
 function getPagesByWebsiteId(websiteId) {
     return client["WebsitePageController.find"](websiteId)
         .then(result => result.data)
         .catch(error => {
             console.error("Error fetching pages:", error);
+            return [];
         });
 }
 
@@ -32,9 +34,10 @@ onBeforeMount(() => {
     getWebsiteInfo(route.params.id);
     getPagesByWebsiteId(route.params.id).then(
         result => {
-            pages.value = result,
-            copyOfPages.value = result
-        })
+            pages.value = result;
+            copyOfPages.value = result;
+        }
+    );
 });
 
 function visitPage(url) {
@@ -42,77 +45,158 @@ function visitPage(url) {
 }
 
 function filterByName(string) {
+    if (!string) {
+        resetFilter();
+        return;
+    }
     let filteredPages = copyOfPages.value.filter(page => {
         const title = page.doc.title ? page.doc.title.toLowerCase() : '';
         const body = page.doc.body ? page.doc.body.toLowerCase() : '';
+        const url = page.doc.url ? page.doc.url.toLowerCase() : '';
 
-        return page.doc.url.toLowerCase().includes(string.toLowerCase()) || title.includes(string.toLowerCase()) || body.includes(string.toLowerCase());
+        return url.includes(string.toLowerCase()) || title.includes(string.toLowerCase()) || body.includes(string.toLowerCase());
     });
     pages.value = filteredPages;
 }
 
 function resetFilter() {
+    search.value = '';
     pages.value = copyOfPages.value;
 }
-
 </script>
 
 <template>
-    <v-container fluid class="align-center justify-center" style="width: 90vh;">
+  <v-container class="py-8 px-6" max-width="1200">
+    <!-- Header -->
+    <div class="d-flex align-center justify-space-between mb-6">
+      <div class="d-flex align-center">
+        <v-btn icon="mdi-arrow-left" variant="text" color="secondary" class="mr-3" to="/websites"></v-btn>
+        <div>
+          <h1 class="text-h4 font-weight-black text-secondary">Páginas de {{ websiteInfo.name || 'Cargando...' }}</h1>
+          <p class="text-body-2 text-grey-darken-1">{{ websiteInfo.url }}</p>
+        </div>
+      </div>
+    </div>
 
-        <v-row class="mb-4">
-            <v-col cols="6">
-                <v-text-field v-model="search" label="Buscar" append-icon="mdi-magnify"
-                    @click:append="filterByName(search)"></v-text-field>
-            </v-col>
+    <!-- Search/Filter Bar -->
+    <v-card class="rounded-xl border-light pa-4 mb-6" variant="flat" border>
+      <v-row class="align-center" dense>
+        <v-col cols="12" sm="8" md="9">
+          <v-text-field
+            v-model="search"
+            label="Buscar páginas por URL, título o contenido..."
+            variant="outlined"
+            density="comfortable"
+            prepend-inner-icon="mdi-magnify"
+            hide-details
+            @keyup.enter="filterByName(search)"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="4" md="3" class="d-flex gap-2 justify-end">
+          <v-btn
+            color="primary"
+            variant="elevated"
+            rounded="lg"
+            class="font-weight-bold"
+            @click="filterByName(search)"
+          >
+            Buscar
+          </v-btn>
+          <v-btn
+            color="secondary"
+            variant="outlined"
+            icon="mdi-refresh"
+            rounded="lg"
+            class="ml-2"
+            @click="resetFilter"
+          ></v-btn>
+        </v-col>
+      </v-row>
+    </v-card>
 
-            <v-col cols="1">
-                <v-btn @click="resetFilter"><v-icon>mdi-refresh</v-icon></v-btn>
-            </v-col>
-        </v-row>
+    <!-- Empty State -->
+    <div v-if="pages.length === 0" class="text-center py-12">
+      <v-icon size="80" color="grey-lighten-1" class="mb-4">mdi-file-document-off-outline</v-icon>
+      <h3 class="text-h5 text-grey-darken-2 font-weight-bold">No se encontraron páginas</h3>
+      <p class="text-body-1 text-grey-darken-1 mt-2">
+        Asegúrate de que el raspador se esté ejecutando y que el snippet esté configurado correctamente.
+      </p>
+    </div>
 
-        <h1 class="display-2 mb-4">Páginas del sitio {{ websiteInfo.name }}:</h1>
-        <v-sheet width="1100" class="mx-auto">
-            <v-list>
-                <v-list-item-group v-if="pages.length > 0">
-                    <v-list-item v-for="page in pages" :key="page.id" class="website-list-item">
-                        <v-list-item-icon>
-                            <v-icon>mdi-spider-web</v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title class="headline font-weight-bold">{{ websiteInfo.name }}</v-list-item-title>
-                            <v-list-item-subtitle class="caption">{{ page.doc.url }}</v-list-item-subtitle>
-                            <v-list-item-text class="caption">{{ page.doc.title }}</v-list-item-text>
-                        </v-list-item-content>
-                        <div>
-                            <v-btn @click="visitPage(page.doc.url)" color="primary">
-                                Visitar <v-icon>mdi-search-web</v-icon>
-                            </v-btn>
-                        </div>
+    <!-- Pages List -->
+    <v-row v-else>
+      <v-col
+        v-for="page in pages"
+        :key="page.id"
+        cols="12"
+      >
+        <v-card class="rounded-xl border-light pa-5" variant="flat" border>
+          <div class="d-flex justify-space-between align-start flex-wrap gap-3">
+            <div class="overflow-hidden" style="flex: 1; min-width: 280px;">
+              <div class="d-flex align-center mb-1">
+                <v-icon color="primary" class="mr-2">mdi-file-document-outline</v-icon>
+                <h3 class="text-h6 font-weight-bold text-secondary text-truncate">
+                  {{ page.doc.title || 'Página Sin Título' }}
+                </h3>
+              </div>
+              <a
+                :href="page.doc.url"
+                target="_blank"
+                class="text-caption text-primary text-decoration-none d-flex align-center"
+              >
+                <span>{{ page.doc.url }}</span>
+                <v-icon size="10" class="ml-1">mdi-open-in-new</v-icon>
+              </a>
+            </div>
+            <v-btn
+              color="primary"
+              variant="tonal"
+              rounded="xl"
+              size="small"
+              class="font-weight-bold"
+              prepend-icon="mdi-eye-outline"
+              @click="visitPage(page.doc.url)"
+            >
+              Visitar Página
+            </v-btn>
+          </div>
 
-                    </v-list-item>
-                </v-list-item-group>
-                <v-list-item v-else>
-                    <v-list-item-content>
-                        <v-list-item-title class="headline font-weight-bold">Lo sentimos, no hay visitas para
-                            mostrarte<v-icon>mdi-emoticon-cry-outline</v-icon></v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-            </v-list>
-        </v-sheet>
-    </v-container>
+          <!-- Parsed Body Content -->
+          <v-expansion-panels class="mt-4" variant="accordion">
+            <v-expansion-panel
+              title="Ver datos extraídos"
+              class="rounded-lg border-light"
+              elevation="0"
+            >
+              <template v-slot:text>
+                <div class="text-subtitle-2 font-weight-bold text-secondary mb-1">Contenido Extraído:</div>
+                <pre class="scraped-content-pre">{{ page.doc.body || JSON.stringify(page.doc, null, 2) }}</pre>
+              </template>
+            </v-expansion-panel>
+          </v-expansion-panels>
+        </v-card>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <style scoped>
-.website-list-item {
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    padding: 10px;
-    margin-bottom: 10px;
+.scraped-content-pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: 'Fira Code', 'Courier New', Courier, monospace;
+  background-color: #f1f5f9;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #334155;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
-.headline {
-    font-size: 24px;
-    color: #333;
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

@@ -4,7 +4,6 @@ import 'vuetify/styles'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createVuetify } from 'vuetify'
-import { createAuth0 } from "@auth0/auth0-vue";
 
 import App from './App.vue'
 import router from './router'
@@ -14,6 +13,24 @@ import * as directives from 'vuetify/directives'
 const vuetify = createVuetify({
     components,
     directives,
+    theme: {
+        defaultTheme: 'customLightTheme',
+        themes: {
+            customLightTheme: {
+                dark: false,
+                colors: {
+                    background: '#f8fafc',
+                    surface: '#ffffff',
+                    primary: '#3b82f6',
+                    secondary: '#0f172a',
+                    error: '#ef4444',
+                    info: '#3b82f6',
+                    success: '#10b981',
+                    warning: '#f59e0b',
+                }
+            }
+        }
+    }
 })
 
 const app = createApp(App)
@@ -21,15 +38,5 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)
-app.use(
-    createAuth0({
-        domain: import.meta.env.VITE_AUTH0_DOMAIN,
-        clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
-        authorizationParams: {
-            redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL,
-            audience: import.meta.env.VITE_AUTH0_AUDIENCE,
-        },
-    })
-)
 
 app.mount('#app')

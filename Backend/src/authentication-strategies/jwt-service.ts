@@ -6,7 +6,7 @@ import {
   Provider,
 } from '@loopback/core';
 import jwt, {RequestHandler} from 'express-jwt';
-import { Auth0Config, JWT_SERVICE, KEY } from './types';
+import { JWTConfig, JWT_SERVICE, KEY } from './types';
 
 const jwks = require('jwks-rsa');
 
@@ -14,22 +14,22 @@ const jwks = require('jwks-rsa');
 export class JWTServiceProvider implements Provider<RequestHandler> {
   constructor(
     @config({fromBinding: KEY})
-    private options: Auth0Config,
+    private options: JWTConfig,
   ) {}
 
   value() {
-    const auth0Config = this.options || {};
-    // Use `express-jwt` to verify the Auth0 JWT token
+    const jwtConfig = this.options || {};
+    // Use `express-jwt` to verify the JWT token
     return jwt({
       secret: jwks.expressJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: auth0Config.jwksUri,
+        jwksUri: jwtConfig.jwksUri,
       }),
-      audience: auth0Config.audience,
-      issuer: auth0Config.issuer,
-      algorithms: auth0Config.algorithms || ['RS256'],
+      audience: jwtConfig.audience,
+      issuer: jwtConfig.issuer,
+      algorithms: jwtConfig.algorithms || ['RS256'],
       // Customize `getToken` to allow `access_token` query string in addition
       // to `Authorization` header
       getToken: (req) => {

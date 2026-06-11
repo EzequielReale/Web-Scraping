@@ -5,11 +5,11 @@ import {
 import {BindingKey} from '@loopback/core';
 import jwt from 'express-jwt'; 
 
-export interface Auth0Config {
-  jwksUri: string; // 'https://apitoday.auth0.com/.well-known/jwks.json',
-  audience: string; // 'http://localhost:3000/ping',
-  issuer: string; // 'https://apitoday.auth0.com/';
-  algorithms:  ['RS256'],
+export interface JWTConfig {
+  jwksUri: string;
+  audience: string;
+  issuer: string | string[];
+  algorithms: ['RS256'];
 }
 
 export const JWT_SERVICE = BindingKey.create<jwt.RequestHandler>(

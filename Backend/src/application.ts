@@ -51,12 +51,12 @@ export class SearchserviceApplication extends BootMixin(
 
     this.service(JWTServiceProvider);
 
-    // Register the Auth0 JWT authentication strategy
+    // Register the Google JWT authentication strategy
     registerAuthenticationStrategy(this as any, JWTAuthenticationStrategy);
     this.configure(KEY).to({
-      jwksUri: 'https://dev-ie4eel16bqhfmfte.us.auth0.com/.well-known/jwks.json',
-      audience: 'http://localhost:3000/',
-      issuer: 'https://dev-ie4eel16bqhfmfte.us.auth0.com/',
+      jwksUri: 'https://www.googleapis.com/oauth2/v3/certs',
+      audience: process.env.GOOGLE_CLIENT_ID || '1014169997184-mjr6p3mupb7ch3cch045cblp212t5m9v.apps.googleusercontent.com',
+      issuer: ['https://accounts.google.com', 'accounts.google.com'],
       algorithms: ['RS256'],
     });
 
