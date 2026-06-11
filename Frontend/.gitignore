@@ -28,3 +28,18 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# OS files
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+.directory
+
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
