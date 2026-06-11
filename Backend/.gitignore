@@ -66,9 +66,6 @@ typings/
 # Emacs auto-save file
 \#*#
 
-# Database configuration file
-/src/datasources/mongo-atlas.datasource.ts
-
 # OS files
 .DS_Store
 .DS_Store?
